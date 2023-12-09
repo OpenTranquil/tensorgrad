@@ -2,6 +2,12 @@
     "files.associations": {
         "tensor.h": "c",
         "dense.h": "c",
-        "optimizer.h": "c"
+        "optimizer.h": "c",
+        "stdlib.h": "c",
+        "stddef.h": "c",
+        "stdio.h": "c",
+        "conv2d.h": "c",
+        "layer.h": "c",
+        "dlist.h": "c"
     }
 }

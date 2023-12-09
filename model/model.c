@@ -4,7 +4,16 @@
 #include <stdlib.h>
 
 struct Layer* model_add_layer(struct NNModel *model, struct Layer *layer) {
-
+    if (model == NULL || layer == NULL) {
+        exit(1);
+        printf("model or layer is NULL!\n");
+    }
+    if (model->layers == NULL) {
+        model->layers = layer;
+    } else {
+        dlist_append_tail(&model->layers->node, &layer->node);
+    }
+    return layer;
 }
 
 struct NNModel* model_compile(struct NNModel *model, OptmizerType optmizer, LossFuncType lossFunc) {

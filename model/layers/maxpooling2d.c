@@ -10,5 +10,8 @@ struct Layer *MaxPooling2D(TupleU64 *kernel_size) {
         exit(1);
     }
 
+    dlist_init(&layer->base.node);
+    layer->kernelSize = kernel_size;
+
     return &layer->base;
 }

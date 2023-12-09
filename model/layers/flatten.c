@@ -10,5 +10,7 @@ struct Layer *Flatten() {
         exit(1);
     }
 
+    dlist_init(&layer->base.node);
+
     return &layer->base;
 }

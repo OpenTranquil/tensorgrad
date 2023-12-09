@@ -10,5 +10,10 @@ struct Layer *Dense(uint64_t units, ActivationType actv) {
         exit(1);
     }
 
+    dlist_init(&layer->base.node);
+    layer->base.activation = actv;
+
+    layer->units = units;
+
     return &layer->base;
 }

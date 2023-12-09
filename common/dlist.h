@@ -12,6 +12,10 @@ typedef struct ListNode {
 #define ContainerOf(ptr, type, member) \
   ((type *)((char *)(ptr) - (char *)(&(((type *)0)->member))))
 
+static inline void dlist_init(struct ListNode *node) {
+	node->next = NULL;
+	node->prev = NULL;
+}
 
 static inline void dlist_append_tail(struct ListNode *dist, struct ListNode *item) {
 	if (dist == NULL) {

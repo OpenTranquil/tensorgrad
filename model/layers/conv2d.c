@@ -10,7 +10,11 @@ struct Layer *Conv2D(uint64_t filters, TupleU64 *kernel_size, ActivationType act
         exit(1);
     }
 
+    dlist_init(&layer->base.node);
     layer->base.activation = actv;
+
+    layer->filters = filters;
+    layer->kernelSize = kernel_size;
 
     return &layer->base;
 }
