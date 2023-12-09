@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "tensor.h": "c",
+        "dense.h": "c",
+        "optimizer.h": "c"
+    }
+}
