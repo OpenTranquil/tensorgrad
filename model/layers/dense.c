@@ -4,11 +4,13 @@
 #include <stdlib.h>
 
 void dense_forword(struct Layer *layer) {
+    printf("dense_forword\n");
     struct DenseLayer *denseLayer = ContainerOf(layer, DenseLayer, base);
     // TODO
 }
 
 void dense_backword(struct Layer *layer) {
+    printf("dense_backword\n");
     struct DenseLayer *denseLayer = ContainerOf(layer, DenseLayer, base);
     // TODO
 }

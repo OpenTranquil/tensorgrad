@@ -4,11 +4,13 @@
 #include <stdlib.h>
 
 void maxpooling2d_forword(struct Layer *layer) {
+    printf("maxpooling2d_forword\n");
     struct MaxPooling2DLayer *maxpooling2dLayer = ContainerOf(layer, MaxPooling2DLayer, base);
     // TODO
 }
 
 void maxpooling2d_backword(struct Layer *layer) {
+    printf("maxpooling2d_backword\n");
     struct MaxPooling2DLayer *maxpooling2dLayer = ContainerOf(layer, MaxPooling2DLayer, base);
     // TODO
 }

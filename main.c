@@ -48,7 +48,7 @@ void minist() {
     model->addLayer(model, Dense(64, RELU));
     model->addLayer(model, Dense(10, SOFTMAX));
 
-    uint64_t epochs = 5;
+    uint64_t epochs = 1;
     uint64_t batch_size = 64;
     float validation_split = 0.2;
 

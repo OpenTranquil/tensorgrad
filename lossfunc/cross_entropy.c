@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 float crossentropy_forword(struct LossFunc *func) {
+    printf("crossentropy_forword\n");
     struct LossFuncCrossEntropy *lossfunc = ContainerOf(func, LossFuncCrossEntropy, base);
     // TODO:
     return 0.0f;

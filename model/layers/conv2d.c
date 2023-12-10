@@ -4,11 +4,13 @@
 #include <stdlib.h>
 
 void conv2d_forword(struct Layer *layer) {
+    printf("conv2d_forword\n");
     struct Conv2DLayer *conv2dLayer = ContainerOf(layer, Conv2DLayer, base);
     // TODO
 }
 
 void conv2d_backword(struct Layer *layer) {
+    printf("conv2d_backword\n");
     struct Conv2DLayer *conv2dLayer = ContainerOf(layer, Conv2DLayer, base);
     // TODO
 }

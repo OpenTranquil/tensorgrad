@@ -18,11 +18,15 @@ static inline void dlist_init(struct ListNode *node) {
 }
 
 static inline void dlist_append_tail(struct ListNode *dist, struct ListNode *item) {
-	if (dist == NULL) {
+	ListNode *node = dist;
+	if (node == NULL) {
 		return;
 	}
-	dist->next = item;
-	item->prev = dist;
+	while (node->next != NULL) {
+		node = node->next;
+	}
+	node->next = item;
+	item->prev = node;
 }
 
 static inline void dlist_insert(struct ListNode *dist, struct ListNode *item) {

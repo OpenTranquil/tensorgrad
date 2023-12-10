@@ -4,11 +4,13 @@
 #include <stdlib.h>
 
 void flatten_forword(struct Layer *layer) {
+    printf("flatten_forword\n");
     struct FlattenLayer *flattenLayer = ContainerOf(layer, FlattenLayer, base);
     // TODO
 }
 
 void flatten_backword(struct Layer *layer) {
+    printf("flatten_backword\n");
     struct FlattenLayer *flattenLayer = ContainerOf(layer, FlattenLayer, base);
     // TODO
 }
