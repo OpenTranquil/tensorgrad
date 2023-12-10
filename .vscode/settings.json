@@ -10,6 +10,7 @@
         "layer.h": "c",
         "dlist.h": "c",
         "adam.h": "c",
-        "cross_entropy.h": "c"
+        "cross_entropy.h": "c",
+        "lossfunc.h": "c"
     }
 }
