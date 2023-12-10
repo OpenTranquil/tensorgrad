@@ -5,6 +5,9 @@ LDFLAGS=
 
 OBJS_AUTOGRAD = autograd/grad.o	\
 				tensor/tensor.c \
+				lossfunc/cross_entropy.c 	\
+				optimizer/sgd.c 	\
+				optimizer/adam.c 	\
 				model/layers/conv2d.c 	\
 				model/layers/maxpooling2d.c 	\
 				model/layers/flatten.c 	\

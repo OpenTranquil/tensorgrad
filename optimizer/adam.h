@@ -7,4 +7,6 @@ typedef struct ADAMOptimizer {
     Optimizer base;
 } ADAMOptimizer;
 
+struct Optimizer *OptmizerADAM();
+
 #endif /* __OPTIMIZER_ADAM_H__ */

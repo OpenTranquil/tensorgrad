@@ -1,4 +1,5 @@
 #include "model.h"
+#include "../optimizer/optimizer.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,8 +17,9 @@ struct Layer* model_add_layer(struct NNModel *model, struct Layer *layer) {
     return layer;
 }
 
-struct NNModel* model_compile(struct NNModel *model, OptmizerType optmizer, LossFuncType lossFunc) {
-
+struct NNModel* model_compile(struct NNModel *model, struct Optimizer *optmizer, struct LossFunc *loss) {
+    model->optmizer = optmizer;
+    model->lossFunc = loss;
 }
 
 struct NNModel* model_fit(struct NNModel *model, struct Tensor *data, uint64_t epochs, uint64_t batchSize, float validationSplit) {

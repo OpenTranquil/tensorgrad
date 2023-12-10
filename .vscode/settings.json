@@ -8,6 +8,8 @@
         "stdio.h": "c",
         "conv2d.h": "c",
         "layer.h": "c",
-        "dlist.h": "c"
+        "dlist.h": "c",
+        "adam.h": "c",
+        "cross_entropy.h": "c"
     }
 }
