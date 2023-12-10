@@ -1,8 +1,10 @@
 #ifndef __OPTIMIZER_H__
 #define __OPTIMIZER_H__
 
-typedef struct OptimizerOperations {
+typedef void (*Update)(struct Optimizer *optimizer, struct Model *model);
 
+typedef struct OptimizerOperations {
+    Update update;
 } OptimizerOperations;
 
 typedef struct Optimizer {

@@ -3,6 +3,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void conv2d_forword(struct Layer *layer) {
+    struct Conv2DLayer *conv2dLayer = ContainerOf(layer, Conv2DLayer, base);
+    // TODO
+}
+
+void conv2d_backword(struct Layer *layer) {
+    struct Conv2DLayer *conv2dLayer = ContainerOf(layer, Conv2DLayer, base);
+    // TODO
+}
+
 struct Layer *Conv2D(uint64_t filters, TupleU64 *kernel_size, ActivationType actv) {
     struct Conv2DLayer *layer = (struct Conv2DLayer*)malloc(sizeof(Conv2DLayer));
     if (layer == NULL) {
@@ -15,6 +25,9 @@ struct Layer *Conv2D(uint64_t filters, TupleU64 *kernel_size, ActivationType act
 
     layer->filters = filters;
     layer->kernelSize = kernel_size;
+
+    layer->base.ops.backword = conv2d_backword;
+    layer->base.ops.forword = conv2d_forword;
 
     return &layer->base;
 }

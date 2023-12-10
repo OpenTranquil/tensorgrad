@@ -1,7 +1,13 @@
 #include "sgd.h"
+#include "../common/dlist.h"
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+void sgd_optimize(struct Optimizer *optimizer, struct Model *model) {
+    struct SGDOptimizer *sgdOptmizer = ContainerOf(optimizer, SGDOptimizer, base);
+    // TODO:
+}
 
 struct Optimizer *OptmizerSGD() {
     struct SGDOptimizer *optimizer = (struct SGDOptimizer*)malloc(sizeof(SGDOptimizer));
@@ -9,6 +15,8 @@ struct Optimizer *OptmizerSGD() {
         printf("SGD Optimizer malloc failed!\n");
         exit(0);
     }
+
+    optimizer->base.ops.update = sgd_optimize;
 
     return &optimizer->base;
 }

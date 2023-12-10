@@ -19,8 +19,12 @@ typedef enum {
     SOFTMAX,
 } ActivationType;
 
-typedef struct LayerOperations {
+typedef void (*LayerForword)(struct Layer *layer);
+typedef void (*Layerbackword)(struct Layer *layer);
 
+typedef struct LayerOperations {
+    LayerForword forword;
+    Layerbackword backword;
 } LayerOperations;
 
 typedef struct Layer {

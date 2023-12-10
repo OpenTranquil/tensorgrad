@@ -5,8 +5,15 @@ typedef enum LossFuncType {
     CROSS_ENTROPY
 } LossFuncType;
 
-typedef struct LossFunc {
 
+typedef float (*LossFuncForword)(struct LossFunc *func);
+
+typedef struct LossFuncOperations {
+    LossFuncForword forword;
+} LossFuncOperations;
+
+typedef struct LossFunc {
+    LossFuncOperations ops;
 } LossFunc;
 
 #endif /* __LOSS_FUNC_H__ */

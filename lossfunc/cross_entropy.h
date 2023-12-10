@@ -4,7 +4,7 @@
 #include "lossfunc.h"
 
 typedef struct LossFuncCrossEntropy {
-    struct LossFunc *base;
+    struct LossFunc base;
 } LossFuncCrossEntropy;
 
 struct LossFunc *CrossEntropyLossFunc();
