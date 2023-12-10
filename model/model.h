@@ -11,7 +11,7 @@
 
 typedef struct Layer* (*ModelAddLayer)(struct NNModel *model, struct Layer *layer);
 typedef struct NNModel* (*ModelCompile)(struct NNModel *model, struct Optimizer *optmizer, struct LossFunc *loss);
-typedef struct NNModel* (*ModelTrain)(struct NNModel *model, struct Tensor *data, uint64_t epochs, uint64_t batchSize, float validationSplit);
+typedef struct NNModel* (*ModelTrain)(struct NNModel *model, struct Tensor *tensor, uint64_t epochs, uint64_t batchSize, float validationSplit);
 typedef struct NNModel* (*ModelEvaluate)(struct NNModel *model);
 
 typedef struct NNModel {

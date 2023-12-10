@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void dense_forword(struct Layer *layer) {
+void dense_forword(struct Layer *layer, struct Tensor *input) {
     printf("dense_forword\n");
     struct DenseLayer *denseLayer = ContainerOf(layer, DenseLayer, base);
     // TODO

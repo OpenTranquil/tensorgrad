@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "../common/dlist.h"
+#include "neuron.h"
 
 typedef struct TupleU64 {
     uint64_t x;
@@ -17,9 +18,10 @@ static struct TupleU64 *Tuple(uint64_t x, uint64_t y) {
 typedef enum {
     RELU,
     SOFTMAX,
+    NONE,
 } ActivationType;
 
-typedef void (*LayerForword)(struct Layer *layer);
+typedef void (*LayerForword)(struct Layer *layer, struct Tensor *input);
 typedef void (*Layerbackword)(struct Layer *layer);
 
 typedef struct LayerOperations {
@@ -29,6 +31,7 @@ typedef struct LayerOperations {
 
 typedef struct Layer {
     ActivationType activation;
+    Neuron *neuron;
     ListNode node;
     LayerOperations ops;
 } Layer;

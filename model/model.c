@@ -23,7 +23,7 @@ struct NNModel* model_compile(struct NNModel *model, struct Optimizer *optmizer,
     model->lossFunc = loss;
 }
 
-struct NNModel* model_fit(struct NNModel *model, struct Tensor *data, uint64_t epochs, uint64_t batchSize, float validationSplit) {
+struct NNModel* model_fit(struct NNModel *model, struct Tensor *tensor, uint64_t epochs, uint64_t batchSize, float validationSplit) {
     if (model == NULL) {
         printf("model is NULL!\n");
         exit(0);
@@ -47,7 +47,13 @@ struct NNModel* model_fit(struct NNModel *model, struct Tensor *data, uint64_t e
         struct ListNode *node = &model->layers->node;
         while (node != NULL) {
             struct Layer *layer = ContainerOf(node, Layer, node);
-            layer->ops.forword(layer);
+            if (layer->node.prev == NULL) { // top layer
+                layer->ops.forword(layer, tensor);
+            } else {
+                Layer *prevLayer = ContainerOf(layer->node.prev, Layer, node);
+                // TODO:
+                layer->ops.forword(layer, tensor);
+            }
             node = node->next;
         }
 

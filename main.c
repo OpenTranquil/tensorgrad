@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include "common/random.h"
 #include "autograd/grad.h"
 #include "optimizer/adam.h"
 #include "lossfunc/cross_entropy.h"
@@ -33,17 +34,24 @@ double fdx(double x, double a, double b) {
 }
 
 void minist() {
+    // TODO: load data
+    float *data = malloc(sizeof(float) * 28 * 28);
+    for (size_t i = 0; i < 28; i++) {
+        for (size_t j = 0; j < 28; j++) {
+            data[i * 28 + j] = frand(255.0f);
+        }
+    }
+
     NamedTensor *tensor = Tensor();
-    tensor->addDimension(tensor, Dimension("batch_size", 28));
     tensor->addDimension(tensor, Dimension("height", 28));
     tensor->addDimension(tensor, Dimension("weight", 28));
+    tensor->data = data;
 
     NNModel *model = SequentialModel();
     model->addLayer(model, Conv2D(32, Tuple(3, 3), RELU));
-    model->addLayer(model, MaxPooling2D(Tuple(2,2)));
+    model->addLayer(model, MaxPooling2D(Tuple(2,2), NONE));
     model->addLayer(model, Conv2D(64, Tuple(3, 3), RELU));
-    model->addLayer(model, MaxPooling2D(Tuple(2,2)));
-    model->addLayer(model, Conv2D(64, Tuple(3, 3), RELU));
+    model->addLayer(model, MaxPooling2D(Tuple(2,2), NONE));
     model->addLayer(model, Flatten());
     model->addLayer(model, Dense(64, RELU));
     model->addLayer(model, Dense(10, SOFTMAX));
@@ -57,7 +65,7 @@ void minist() {
     model->evaluate(model);
 }
 
-int main(int argc, char *argv[]) {
+void grad_test() {
     double av = 5.1f;
     double xv = 6.3f;
     double bv = 2.1f;
@@ -69,7 +77,10 @@ int main(int argc, char *argv[]) {
     ComputeNode *x = Variable(xv, "x");
     ComputeNode *fx = Pow(Add(Mul(x, Param(av, "a")), Param(bv, "b")), Constant(2.0f));
     printf("ACTUAL2 val: %f, grad:%f\n", Forword(fx), Backword(x));
+}
 
+int main(int argc, char *argv[]) {
+    grad_test();
     minist();
     return 0;
 }

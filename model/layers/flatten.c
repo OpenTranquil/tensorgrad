@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void flatten_forword(struct Layer *layer) {
+void flatten_forword(struct Layer *layer, struct Tensor *input) {
     printf("flatten_forword\n");
     struct FlattenLayer *flattenLayer = ContainerOf(layer, FlattenLayer, base);
     // TODO

@@ -1,11 +1,13 @@
 #include "conv2d.h"
+#include "../../common/random.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-void conv2d_forword(struct Layer *layer) {
+void conv2d_forword(struct Layer *layer, struct Tensor *input) {
     printf("conv2d_forword\n");
     struct Conv2DLayer *conv2dLayer = ContainerOf(layer, Conv2DLayer, base);
+
     // TODO
 }
 
@@ -27,6 +29,36 @@ struct Layer *Conv2D(uint64_t filters, TupleU64 *kernel_size, ActivationType act
 
     layer->filters = filters;
     layer->kernelSize = kernel_size;
+
+    for (size_t filterNum = 0; filterNum < filters; filterNum++) {
+        struct Conv2DUnit *unit = (struct Conv2DUnit*)malloc(sizeof(Conv2DUnit));
+        if (unit == NULL) {
+            printf("conv2d unit malloc failed!\n");
+            exit(0);
+        }
+        dlist_init(&unit->node);
+        unit->kernel.width = kernel_size->x;
+        unit->kernel.height = kernel_size->y;
+
+        float *kernel_data = (float *)malloc(sizeof(float));
+        if (kernel_data == NULL) {
+            printf("conv2d kernel data malloc failed!\n");
+            exit(0);
+        }
+        for (size_t x = 0; x < unit->kernel.height; x++) {
+            for (size_t y = 0; y < unit->kernel.width; y++) {
+                unit->kernel.data[x * unit->kernel.height + y] = frand(1.0f);
+            }
+        }
+
+        unit->kernel.data = kernel_data;
+
+        if (layer->units == NULL) {
+            layer->units == unit;
+        } else {
+            dlist_append_tail(&layer->units->node, &unit->node);
+        }
+    }
 
     layer->base.ops.backword = conv2d_backword;
     layer->base.ops.forword = conv2d_forword;

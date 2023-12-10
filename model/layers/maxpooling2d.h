@@ -8,6 +8,6 @@ typedef struct MaxPooling2DLayer {
     TupleU64 *kernelSize;
 } MaxPooling2DLayer;
 
-struct Layer *MaxPooling2D(TupleU64 *kernel_size);
+struct Layer *MaxPooling2D(TupleU64 *kernel_size, ActivationType actv);
 
 #endif /* __LAYER_MAXPOOLING2D_H__ */
