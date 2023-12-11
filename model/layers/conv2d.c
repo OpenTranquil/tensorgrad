@@ -7,7 +7,6 @@
 void conv2d_forword(struct Layer *layer, struct Tensor *input) {
     printf("conv2d_forword\n");
     struct Conv2DLayer *conv2dLayer = ContainerOf(layer, Conv2DLayer, base);
-
     // TODO
 }
 
@@ -61,6 +60,18 @@ struct Layer *Conv2D(uint64_t filters, TupleU64 *kernel_size, ActivationType act
             layer->units == unit;
         } else {
             dlist_append_tail(&layer->units->node, &unit->node);
+        }
+
+        struct Neuron *neuron = (struct Neuron*)malloc(sizeof(struct Neuron));
+        if (neuron == NULL) {
+            printf("neuron malloc failed!\n");
+            exit(0);
+        }
+        dlist_init(&neuron->node);
+        if (layer->base.neuron == NULL) {
+            layer->base.neuron == neuron;
+        } else {
+            dlist_append_tail(&layer->base.neuron->node, &neuron->node);
         }
     }
 
