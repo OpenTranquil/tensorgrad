@@ -7,7 +7,14 @@
 void conv2d_forword(struct Layer *layer, struct Tensor *input) {
     printf("conv2d_forword\n");
     struct Conv2DLayer *conv2dLayer = ContainerOf(layer, Conv2DLayer, base);
-    // TODO
+
+    // setup neurons input
+    struct ListNode *node = &layer->neuron->node;
+    while (node != NULL) {
+        struct Neuron *neuron = ContainerOf(node, Neuron, node);
+        neuron->input = input;
+        node = node->next;
+    }
 }
 
 void conv2d_backword(struct Layer *layer) {
@@ -68,6 +75,7 @@ struct Layer *Conv2D(uint64_t filters, TupleU64 *kernel_size, ActivationType act
             exit(0);
         }
         dlist_init(&neuron->node);
+        // TODO: malloc neuron output tensor and params, may be refactor as a function called neuron_create
         if (layer->base.neuron == NULL) {
             layer->base.neuron == neuron;
         } else {
