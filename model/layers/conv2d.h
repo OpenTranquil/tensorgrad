@@ -12,7 +12,6 @@ typedef struct Conv2DKernel {
 
 typedef struct Conv2DUnit {
     ListNode node;
-    struct Tensor *tensor;
     struct Conv2DKernel kernel;
 } Conv2DUnit;
 
