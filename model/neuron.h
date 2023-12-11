@@ -8,6 +8,8 @@ typedef struct Activation {
 
 typedef struct Neuron {
     NamedTensor *input;
+    NamedTensor *weightParams;
+    NamedTensor *offsetParams;
     NamedTensor *output;
     Activation *actv;
 } Neuron;
