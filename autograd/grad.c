@@ -202,6 +202,7 @@ ComputeNode *Param(struct NamedTensor *init_val, const char *name) {
     node->type = VARIABLE;
     node->grad = Scalar(1.0f);
     node->parent == NULL;
+    node->requireGrad = true;
 
     node->variable.val = init_val;
     node->variable.name = name;
@@ -217,6 +218,7 @@ ComputeNode *Variable(struct NamedTensor *init_val, const char *name) {
     node->type = VARIABLE;
     node->grad = Scalar(1.0f);
     node->parent == NULL;
+    node->requireGrad = false;
 
     node->variable.val = init_val;
     node->variable.name = name;
@@ -232,6 +234,7 @@ ComputeNode *Constant(struct NamedTensor *init_val) {
     node->type = CONSTANT;
     node->grad = Scalar(1.0f);
     node->parent == NULL;
+    node->requireGrad = false;
 
     node->constant.val = init_val;
     return node;
