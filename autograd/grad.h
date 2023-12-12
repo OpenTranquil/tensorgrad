@@ -1,6 +1,10 @@
 #ifndef __AUTOGRAD_COMPUTE_NODE_H__
 #define __AUTOGRAD_COMPUTE_NODE_H__
 
+#include <stddef.h>
+#include <stdbool.h>
+#include "../tensor/tensor.h"
+
 typedef enum NodeType {
     VARIABLE = 0,
     CONSTANT,
@@ -18,15 +22,16 @@ typedef enum OperatorType {
 
 typedef struct OperatorFunc {
     OperatorType type;
-    double (*forword)(struct ComputeNode *node);
-    double (*backward)(struct ComputeNode *node);
+    struct NamedTensor *(*forword)(struct ComputeNode *node);
+    struct NamedTensor *(*backward)(struct ComputeNode *node);
 } OperatorFunc;
 
 typedef struct ComputeNode {
     NodeType type;
     struct ComputeNode *parent;
 
-    double grad;
+    bool requireGrad;
+    NamedTensor *grad;
     union {
         struct {
             struct Node *left;
@@ -34,11 +39,11 @@ typedef struct ComputeNode {
             OperatorFunc *op;
         } operator;
         struct {
-            double val;
+            struct NamedTensor *val;
             const char *name;
         } variable;
         struct {
-            double val;
+            struct NamedTensor *val;
         } constant;
     };
 } ComputeNode;
@@ -46,10 +51,10 @@ typedef struct ComputeNode {
 ComputeNode *Pow(ComputeNode *left, ComputeNode *right);
 ComputeNode *Add(ComputeNode *left, ComputeNode *right);
 ComputeNode *Mul(ComputeNode *left, ComputeNode *right);
-ComputeNode *Param(double init_val, const char *name);
-ComputeNode *Variable(double init_val, const char *name);
-ComputeNode *Constant(double init_val);
-double Forword(ComputeNode *node);
-double Backword(ComputeNode *node);
+ComputeNode *Param(struct NamedTensor *init_val, const char *name);
+ComputeNode *Variable(struct NamedTensor *init_val, const char *name);
+ComputeNode *Constant(struct NamedTensor *init_val);
+struct NamedTensor *Forword(ComputeNode *node);
+struct NamedTensor *Backword(ComputeNode *node);
 
 #endif /* __AUTOGRAD_COMPUTE_NODE_H__ */

@@ -13,26 +13,6 @@
 #include "model/model.h"
 #include "tensor/tensor.h"
 
-// f = (ax + b)^2
-// Z = ax
-// Y = Z + b
-// F = Y ^ 2
-
-// fx' = FY'YZ'Zx'
-// fx' = 2Y * 1 * a
-// fx' = 2(ax +b) * 1 * a
-// fx' = 2(ax+b)a
-
-double fx(double x, double a, double b) {
-    double val = pow((a * x + b), 2);
-    return val;
-}
-
-double fdx(double x, double a, double b) {
-    double grad = 2.0f * (a * x + b) * a;
-    return grad;
-}
-
 void minist() {
     // TODO: load data
     float *data = malloc(sizeof(float) * 28 * 28);
@@ -65,18 +45,38 @@ void minist() {
     model->evaluate(model);
 }
 
+struct NamedTensor *fx(struct NamedTensor *x, struct NamedTensor *a, struct NamedTensor *b) {
+    if (x->dimension_nums == 0 && a->dimension_nums == 0 && b->dimension_nums == 0) {
+        double val = pow((*a->data * *x->data + *b->data), 2);
+        return Scalar(val);
+    }
+    // TODO
+    printf("not support vector and matrix now\n");
+    return NULL;
+}
+
+struct NamedTensor *fdx(struct NamedTensor *x, struct NamedTensor *a, struct NamedTensor *b) {
+    if (x->dimension_nums == 0 && a->dimension_nums == 0 && b->dimension_nums == 0) {
+        double grad = 2.0f * (*a->data * *x->data + *b->data) * *a->data;
+        return Scalar(grad);
+    }
+    // TODO
+    printf("not support vector and matrix now\n");
+    return NULL;
+}
+
 void grad_test() {
-    double av = 5.1f;
-    double xv = 6.3f;
-    double bv = 2.1f;
-    printf("a:%f, b:%f, x:%f \n", av, bv, xv);
-    double exp_val = fx(xv, av, bv);
-    double exp_grad = fdx(xv, av, bv);
-    printf("EXPECTED val:%f, grad:%f\n", exp_val, exp_grad);
+    struct NamedTensor *av = Scalar(5.1f);
+    struct NamedTensor *xv = Scalar(6.3f);
+    struct NamedTensor *bv = Scalar(2.1f);
+    printf("a:%f, b:%f, x:%f \n", *av->data, *bv->data, *xv->data);
+    struct NamedTensor *exp_val = fx(xv, av, bv);
+    struct NamedTensor *exp_grad = fdx(xv, av, bv);
+    printf("EXPECTED val:%f, grad:%f\n", *exp_val->data, *exp_grad->data);
 
     ComputeNode *x = Variable(xv, "x");
-    ComputeNode *fx = Pow(Add(Mul(x, Param(av, "a")), Param(bv, "b")), Constant(2.0f));
-    printf("ACTUAL2 val: %f, grad:%f\n", Forword(fx), Backword(x));
+    ComputeNode *fx = Pow(Add(Mul(x, Param(av, "a")), Param(bv, "b")), Constant(Scalar(2.0f)));
+    printf("ACTUAL2 val: %f, grad:%f\n", *Forword(fx)->data, *Backword(x)->data);
 }
 
 int main(int argc, char *argv[]) {

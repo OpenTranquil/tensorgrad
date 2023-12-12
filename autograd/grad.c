@@ -4,7 +4,7 @@
 
 #include "grad.h"
 
-double forword(ComputeNode *node) {
+struct NamedTensor *forword(ComputeNode *node) {
     if (node->type == VARIABLE) {
         return node->variable.val;
     }
@@ -14,11 +14,11 @@ double forword(ComputeNode *node) {
     return node->operator.op->forword(node);
 }
 
-double backward(ComputeNode *node) {
+struct NamedTensor *backward(ComputeNode *node) {
     ComputeNode *cur = node;
     while (cur != NULL) {
         if (cur->type == VARIABLE) {
-            cur->grad = 1.0f;
+            cur->grad = Scalar(1.0f);
         }
         if (cur->type == CONSTANT) {
             printf("cannot compute grad for constant!\n");
@@ -34,18 +34,32 @@ double backward(ComputeNode *node) {
     }
 }
 
-double op_pow_forword(struct ComputeNode *node) {
+struct NamedTensor *op_pow_forword(struct ComputeNode *node) {
     ComputeNode *left = node->operator.left;
     ComputeNode *right = node->operator.right;
-    return pow(forword(left), forword(right));
+    NamedTensor *leftVal = forword(left);
+    NamedTensor *rightVal = forword(right);
+    if (leftVal->dimension_nums == 0 && rightVal->dimension_nums == 0) {
+        // FIXME: memory leak below
+        return Scalar(pow(*leftVal->data, *rightVal->data));
+    }
+    printf("TODO: not support vector and maxrix now!\n");
+    return NULL;
 }
 
-double op_pow_backword(struct ComputeNode *node) {
+struct NamedTensor *op_pow_backword(struct ComputeNode *node) {
     ComputeNode *left = node->operator.left;
     ComputeNode *right = node->operator.right;
-    double grad = forword(right) * forword(left) * left->grad;
-    node->grad = grad;
-    return grad;
+    NamedTensor *leftVal = forword(left);
+    NamedTensor *rightVal = forword(right);
+    if (leftVal->dimension_nums == 0 && rightVal->dimension_nums == 0) {
+        double gradVal = *rightVal->data * *leftVal->data * *left->grad->data;
+        // FIXME: memory leak below
+        node->grad = Scalar(gradVal);
+        return node->grad;
+    }
+    printf("TODO: not support vector and maxrix now!\n");
+    return NULL;
 }
 
 OperatorFunc op_pow = {
@@ -54,17 +68,22 @@ OperatorFunc op_pow = {
     .backward = op_pow_backword,
 };
 
-double op_add_forword(struct ComputeNode *node) {
+struct NamedTensor *op_add_forword(struct ComputeNode *node) {
     ComputeNode *left = node->operator.left;
     ComputeNode *right = node->operator.right;
-    return forword(left) + forword(right);
+    NamedTensor *leftVal = forword(left);
+    NamedTensor *rightVal = forword(right);
+    if (leftVal->dimension_nums == 0 && rightVal->dimension_nums == 0) {
+        return  Scalar(*leftVal->data + *rightVal->data);
+    }
+    printf("TODO: not support vector and maxrix now!\n");
+    return NULL;
 }
 
-double op_add_backword(struct ComputeNode *node) {
+struct NamedTensor *op_add_backword(struct ComputeNode *node) {
     ComputeNode *left = node->operator.left;
-    double grad = 1.0f * left->grad;
-    node->grad = grad;
-    return grad;
+    node->grad = left->grad;
+    return node->grad;
 }
 
 OperatorFunc op_add = {
@@ -73,19 +92,30 @@ OperatorFunc op_add = {
     .backward = op_add_backword,
 };
 
-double op_mul_forword(struct ComputeNode *node) {
+struct NamedTensor *op_mul_forword(struct ComputeNode *node) {
     ComputeNode *left = node->operator.left;
     ComputeNode *right = node->operator.right;
-
-    return forword(left) * forword(right);
+    NamedTensor *leftVal = forword(left);
+    NamedTensor *rightVal = forword(right);
+    if (leftVal->dimension_nums == 0 && rightVal->dimension_nums == 0) {
+        return  Scalar(*leftVal->data * *rightVal->data);
+    }
+    printf("TODO: not support vector and maxrix now!\n");
+    return NULL;
 }
 
-double op_mul_backword(struct ComputeNode *node) {
+struct NamedTensor *op_mul_backword(struct ComputeNode *node) {
     ComputeNode *right = node->operator.right;
     ComputeNode *left = node->operator.left;
-    double grad = forword(right) * left->grad;
-    node->grad = grad;
-    return grad;
+    NamedTensor *rightVal = forword(right);
+    if (rightVal->dimension_nums == 0) {
+        double gradVal = *rightVal->data * *left->grad->data;
+        // FIXME: memory leak below
+        node->grad = Scalar(gradVal);
+        return node->grad;
+    }
+    printf("TODO: not support vector and maxrix now!\n");
+    return NULL;
 }
 
 OperatorFunc op_mul = {
@@ -101,7 +131,7 @@ ComputeNode *Pow(ComputeNode *left, ComputeNode *right) {
         exit(1);
     }
     node->type = BINARY_OPERATOR;
-    node->grad = 1.0f;
+    node->grad = Scalar(1.0f);
     node->parent == NULL;
 
     node->operator.left = left;
@@ -124,7 +154,7 @@ ComputeNode *Add(ComputeNode *left, ComputeNode *right) {
         exit(1);
     }
     node->type = BINARY_OPERATOR;
-    node->grad = 1.0f;
+    node->grad = Scalar(1.0f);
     node->parent == NULL;
 
     node->operator.left = left;
@@ -148,7 +178,7 @@ ComputeNode *Mul(ComputeNode *left, ComputeNode *right) {
         exit(1);
     }
     node->type = BINARY_OPERATOR;
-    node->grad = 1.0f;
+    node->grad = Scalar(1.0f);
     node->parent == NULL;
     node->operator.left = left;
     node->operator.right = right;
@@ -163,14 +193,14 @@ ComputeNode *Mul(ComputeNode *left, ComputeNode *right) {
     return node;
 }
 
-ComputeNode *Param(double init_val, const char *name) {
+ComputeNode *Param(struct NamedTensor *init_val, const char *name) {
     ComputeNode *node = (ComputeNode *)malloc(sizeof(ComputeNode));
     if (node == NULL) {
         printf("ComputeNode malloc failed!\n");
         exit(1);
     }
     node->type = VARIABLE;
-    node->grad = 1.0f;
+    node->grad = Scalar(1.0f);
     node->parent == NULL;
 
     node->variable.val = init_val;
@@ -178,14 +208,14 @@ ComputeNode *Param(double init_val, const char *name) {
     return node;
 }
 
-ComputeNode *Variable(double init_val, const char *name) {
+ComputeNode *Variable(struct NamedTensor *init_val, const char *name) {
     ComputeNode *node = (ComputeNode *)malloc(sizeof(ComputeNode));
     if (node == NULL) {
         printf("ComputeNode malloc failed!\n");
         exit(1);
     }
     node->type = VARIABLE;
-    node->grad = 1.0f;
+    node->grad = Scalar(1.0f);
     node->parent == NULL;
 
     node->variable.val = init_val;
@@ -193,23 +223,23 @@ ComputeNode *Variable(double init_val, const char *name) {
     return node;
 }
 
-ComputeNode *Constant(double init_val) {
+ComputeNode *Constant(struct NamedTensor *init_val) {
     ComputeNode *node = (ComputeNode *)malloc(sizeof(ComputeNode));
     if (node == NULL) {
         printf("ComputeNode malloc failed!\n");
         exit(1);
     }
     node->type = CONSTANT;
-    node->grad = 1.0f;
+    node->grad = Scalar(1.0f);
     node->parent == NULL;
 
     node->constant.val = init_val;
     return node;
 }
 
-double Forword(ComputeNode *node) {
+struct NamedTensor *Forword(ComputeNode *node) {
     return forword(node);
 }
-double Backword(ComputeNode *node) {
+struct NamedTensor *Backword(ComputeNode *node) {
     return backward(node);
 }

@@ -34,3 +34,30 @@ struct NamedTensor *Tensor() {
 
     return tensor;
 }
+
+struct NamedTensor *Scalar(double v) {
+    NamedTensor *tensor = Tensor();
+    double *val = malloc(sizeof(double));
+    if (val == NULL) {
+        printf("scalar malloc failed!\n");
+        exit(0);
+    }
+    *val = v;
+    tensor->data = val;
+    return tensor;
+}
+
+struct NamedTensor *Vector(struct DimensionDef *dimension, double *vector) {
+    NamedTensor *tensor = Tensor();
+    tensor->addDimension(tensor, dimension);
+    tensor->data = vector;
+    return tensor;
+}
+
+struct NamedTensor *Matrix(struct DimensionDef *dimension1, struct DimensionDef *dimension2, double *matrix) {
+    NamedTensor *tensor = Tensor();
+    tensor->addDimension(tensor, dimension1);
+    tensor->addDimension(tensor, dimension2);
+    tensor->data = matrix;
+    return tensor;
+}
