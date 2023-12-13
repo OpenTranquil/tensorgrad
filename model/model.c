@@ -21,6 +21,7 @@ struct Layer* model_add_layer(struct NNModel *model, struct Layer *layer) {
 struct NNModel* model_compile(struct NNModel *model, struct Optimizer *optmizer, struct LossFunc *loss) {
     model->optmizer = optmizer;
     model->lossFunc = loss;
+    //TODO: Contrsuct Compute Node Tree from network structure
 }
 
 struct NNModel* model_fit(struct NNModel *model, struct Tensor *tensor, uint64_t epochs, uint64_t batchSize, float validationSplit) {
