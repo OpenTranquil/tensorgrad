@@ -4,9 +4,9 @@ CFLAGS=-c -Wall
 LDFLAGS=
 
 OBJS_AUTOGRAD = autograd/ops.o	\
-				autograd/ops/add.o	\
-				autograd/ops/mul.o	\
-				autograd/ops/pow.o	\
+				autograd/ops/add_cpu.o	\
+				autograd/ops/mul_cpu.o	\
+				autograd/ops/pow_cpu.o	\
 				autograd/compute_node.o	\
 				tensor/tensor.c \
 				lossfunc/cross_entropy.c 	\
