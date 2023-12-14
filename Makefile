@@ -3,7 +3,11 @@ CC = gcc
 CFLAGS=-c -Wall
 LDFLAGS=
 
-OBJS_AUTOGRAD = autograd/grad.o	\
+OBJS_AUTOGRAD = autograd/ops.o	\
+				autograd/ops/add.o	\
+				autograd/ops/mul.o	\
+				autograd/ops/pow.o	\
+				autograd/compute_node.o	\
 				tensor/tensor.c \
 				lossfunc/cross_entropy.c 	\
 				optimizer/sgd.c 	\
@@ -25,4 +29,5 @@ grad:	$(OBJS_AUTOGRAD)
 
 clean:
 	rm -rf autograd/*.o
+	rm -rf autograd/ops/*.o
 	rm -rf grad

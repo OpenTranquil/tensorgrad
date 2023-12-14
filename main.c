@@ -2,7 +2,8 @@
 #include <math.h>
 #include <stdlib.h>
 #include "common/random.h"
-#include "autograd/grad.h"
+#include "autograd/ops.h"
+#include "autograd/compute_node.h"
 #include "optimizer/adam.h"
 #include "lossfunc/cross_entropy.h"
 #include "model/layer.h"

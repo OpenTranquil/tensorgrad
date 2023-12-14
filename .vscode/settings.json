@@ -14,6 +14,17 @@
         "lossfunc.h": "c",
         "sgd.h": "c",
         "bitset": "c",
-        "model.h": "c"
-    }
+        "model.h": "c",
+        "__node_handle": "c",
+        "grad.h": "c",
+        "ops.h": "c",
+        "compute_node.h": "c"
+    },
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/Users/neo/project/tranquilos/aiengine",
+            "binaryPath": "/Users/neo/project/tranquilos/aiengine/grad",
+            "binaryArgs": []
+        }
+    ]
 }
