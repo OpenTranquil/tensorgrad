@@ -3,11 +3,15 @@
 #include <stdio.h>
 #include <stddef.h>
 
-struct Dimension *tensor_add_dimension(struct NamedTensor *tensor, struct Dimension *dimension) {
+struct DimensionDef *tensor_add_dimension(struct NamedTensor *tensor, struct DimensionDef *dimension) {
     tensor->dimension_nums++;
-    // tensor->dimensions
+    if (tensor->dimensions == NULL) {
+        tensor->dimensions = dimension;
+    } else {
+        dlist_append_tail(&tensor->dimensions->node, &dimension->node);
+    }
+    return dimension;
 }
-
 
 struct DimensionDef *Dimension(const char* name, uint64_t size) {
     DimensionDef *dimension = (DimensionDef*)malloc(sizeof(DimensionDef));
@@ -15,9 +19,42 @@ struct DimensionDef *Dimension(const char* name, uint64_t size) {
         printf("dimension malloc failed!\n");
         exit(0);
     }
+    dlist_init(&dimension->node);
     dimension->name = name;
     dimension->size = size;
     return dimension;
+}
+
+void tensor_print(struct NamedTensor *tensor) {
+    if (tensor == NULL) {
+        printf("NULL\n");
+        return;
+    }
+    if (tensor->dimension_nums == 0) {
+        printf("%f\n", *tensor->data);
+    }
+    if (tensor->dimensions == NULL) {
+        printf("tensor's dimension should not be NULL!\n");
+        exit(0);
+    }
+    if (tensor->data == NULL) {
+        printf("tensor's data should not be NULL!\n");
+        exit(0);
+    }
+    if (tensor->dimension_nums == 1) {
+        printf("%s = [", tensor->dimensions->name);
+        for (size_t idx = 0; idx < tensor->dimensions->size; idx++) {
+            if (idx == tensor->dimensions->size - 1) {
+                printf("%f", tensor->data[idx]);
+            } else {
+                printf("%f, ", tensor->data[idx]);
+            }
+        }
+        printf("]\n");
+    }
+    if (tensor->dimension_nums == 2) {
+        // TODO:
+    }
 }
 
 struct NamedTensor *Tensor() {
@@ -31,6 +68,7 @@ struct NamedTensor *Tensor() {
     tensor->dimension_nums = 0;
     tensor->dimensions = NULL;
     tensor->addDimension = tensor_add_dimension;
+    tensor->print = tensor_print;
 
     return tensor;
 }

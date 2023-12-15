@@ -60,9 +60,12 @@ typedef struct ComputeNode {
 ComputeNode *Pow(ComputeNode *left, ComputeNode *right);
 ComputeNode *Add(ComputeNode *left, ComputeNode *right);
 ComputeNode *Mul(ComputeNode *left, ComputeNode *right);
+ComputeNode *Softmax(ComputeNode *operand);
+
 ComputeNode *Param(struct NamedTensor *init_val, const char *name);
 ComputeNode *Variable(struct NamedTensor *init_val, const char *name);
 ComputeNode *Constant(struct NamedTensor *init_val);
+
 struct NamedTensor *Forword(ComputeNode *node);
 struct NamedTensor *Backword(ComputeNode *node);
 
