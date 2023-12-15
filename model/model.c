@@ -58,8 +58,12 @@ struct NNModel* model_fit(struct NNModel *model, struct Tensor *tensor, uint64_t
             node = node->next;
         }
 
+        //TODO:
+        struct NamedTensor *lastLayerOutput = NULL;
+        struct NamedTensor *expectedVector = NULL;
+
         LossFunc *lossfunc = model->lossFunc;
-        float loss = lossfunc->ops.forword(lossfunc);
+        float loss = lossfunc->ops.forword(lossfunc, lastLayerOutput, expectedVector);
 
         Optimizer *optimizer = model->optmizer;
         optimizer->ops.update(optimizer, model);

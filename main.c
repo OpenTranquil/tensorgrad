@@ -29,10 +29,10 @@ void minist() {
     tensor->data = data;
 
     NNModel *model = SequentialModel();
-    model->addLayer(model, Conv2D(32, Tuple(3, 3), RELU));
-    model->addLayer(model, MaxPooling2D(Tuple(2,2), NONE));
-    model->addLayer(model, Conv2D(64, Tuple(3, 3), RELU));
-    model->addLayer(model, MaxPooling2D(Tuple(2,2), NONE));
+    model->addLayer(model, Conv2D(32, Tuple(3, 3), ACTV_RELU));
+    model->addLayer(model, MaxPooling2D(Tuple(2,2), ACTV_NONE));
+    model->addLayer(model, Conv2D(64, Tuple(3, 3), ACTV_RELU));
+    model->addLayer(model, MaxPooling2D(Tuple(2,2), ACTV_NONE));
     model->addLayer(model, Flatten());
     model->addLayer(model, Dense(64, RELU));
     model->addLayer(model, Dense(10, SOFTMAX));

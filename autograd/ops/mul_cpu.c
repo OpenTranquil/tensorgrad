@@ -5,8 +5,8 @@
 #include "../compute_node.h"
 
 struct NamedTensor *op_mul_forword(struct ComputeNode *node) {
-    ComputeNode *left = node->operator.left;
-    ComputeNode *right = node->operator.right;
+    ComputeNode *left = node->operator.binaryOperand.left;
+    ComputeNode *right = node->operator.binaryOperand.right;
     NamedTensor *leftVal = forword(left);
     NamedTensor *rightVal = forword(right);
     if (leftVal->dimension_nums == 0 && rightVal->dimension_nums == 0) {
@@ -17,8 +17,8 @@ struct NamedTensor *op_mul_forword(struct ComputeNode *node) {
 }
 
 struct NamedTensor *op_mul_backword(struct ComputeNode *node) {
-    ComputeNode *right = node->operator.right;
-    ComputeNode *left = node->operator.left;
+    ComputeNode *right = node->operator.binaryOperand.right;
+    ComputeNode *left = node->operator.binaryOperand.left;
     NamedTensor *rightVal = forword(right);
     if (rightVal->dimension_nums == 0) {
         double gradVal = *rightVal->data * *left->grad->data;
@@ -45,8 +45,8 @@ ComputeNode *Mul(ComputeNode *left, ComputeNode *right) {
     node->type = BINARY_OPERATOR;
     node->grad = Scalar(1.0f);
     node->parent == NULL;
-    node->operator.left = left;
-    node->operator.right = right;
+    node->operator.binaryOperand.left = left;
+    node->operator.binaryOperand.right = right;
     node->operator.op = &op_mul;
 
     if (left == NULL || right == NULL) {

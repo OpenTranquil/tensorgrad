@@ -18,7 +18,8 @@
         "__node_handle": "c",
         "grad.h": "c",
         "ops.h": "c",
-        "compute_node.h": "c"
+        "compute_node.h": "c",
+        "ios": "c"
     },
     "makefile.launchConfigurations": [
         {

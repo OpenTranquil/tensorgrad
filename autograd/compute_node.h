@@ -8,6 +8,7 @@
 typedef enum NodeType {
     VARIABLE = 0,
     CONSTANT,
+    UNARY_OPERATOR,
     BINARY_OPERATOR,
 } NodeType;
 
@@ -18,6 +19,9 @@ typedef enum OperatorType {
     POW,
     LOG,
     LN,
+    SOFTMAX,
+    RELU,
+    CONV2D,
 } OperatorType;
 
 typedef struct OperatorFunc {
@@ -34,8 +38,13 @@ typedef struct ComputeNode {
     NamedTensor *grad;
     union {
         struct {
-            struct Node *left;
-            struct Node *right;
+            union {
+                struct {
+                    struct Node *left;
+                    struct Node *right;
+                } binaryOperand;
+                struct Node *unaryOperand;
+            };
             OperatorFunc *op;
         } operator;
         struct {

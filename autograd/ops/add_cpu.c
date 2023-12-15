@@ -5,8 +5,8 @@
 #include "../compute_node.h"
 
 struct NamedTensor *op_add_forword(struct ComputeNode *node) {
-    ComputeNode *left = node->operator.left;
-    ComputeNode *right = node->operator.right;
+    ComputeNode *left = node->operator.binaryOperand.left;
+    ComputeNode *right = node->operator.binaryOperand.right;
     NamedTensor *leftVal = forword(left);
     NamedTensor *rightVal = forword(right);
     if (leftVal->dimension_nums == 0 && rightVal->dimension_nums == 0) {
@@ -17,7 +17,7 @@ struct NamedTensor *op_add_forword(struct ComputeNode *node) {
 }
 
 struct NamedTensor *op_add_backword(struct ComputeNode *node) {
-    ComputeNode *left = node->operator.left;
+    ComputeNode *left = node->operator.binaryOperand.left;
     node->grad = left->grad;
     return node->grad;
 }
@@ -38,8 +38,8 @@ ComputeNode *Add(ComputeNode *left, ComputeNode *right) {
     node->grad = Scalar(1.0f);
     node->parent == NULL;
 
-    node->operator.left = left;
-    node->operator.right = right;
+    node->operator.binaryOperand.left = left;
+    node->operator.binaryOperand.right = right;
 
     node->operator.op = &op_add;
 

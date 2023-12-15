@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-float crossentropy_forword(struct LossFunc *func) {
+float crossentropy_forword(struct LossFunc *func, struct NamedTensor *input, struct NamedTensor *expected) {
     printf("crossentropy_forword\n");
     struct LossFuncCrossEntropy *lossfunc = ContainerOf(func, LossFuncCrossEntropy, base);
     // TODO:

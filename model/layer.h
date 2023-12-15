@@ -16,9 +16,9 @@ static struct TupleU64 *Tuple(uint64_t x, uint64_t y) {
 }
 
 typedef enum {
-    RELU,
-    SOFTMAX,
-    NONE,
+    ACTV_RELU,
+    ACTV_SOFTMAX,
+    ACTV_NONE,
 } ActivationType;
 
 typedef void (*LayerForword)(struct Layer *layer, struct Tensor *input);
