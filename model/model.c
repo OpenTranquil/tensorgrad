@@ -1,4 +1,5 @@
 #include "model.h"
+#include "../common/random.h"
 #include "../optimizer/optimizer.h"
 #include <stddef.h>
 #include <stdio.h>
@@ -59,11 +60,30 @@ struct NNModel* model_fit(struct NNModel *model, struct Tensor *tensor, uint64_t
         }
 
         //TODO:
-        struct NamedTensor *lastLayerOutput = NULL;
-        struct NamedTensor *expectedVector = NULL;
+        double *data = (double *)malloc(sizeof(double) * 10);
+        data[0] = 0.000065;
+        data[1] = 0.000241;
+        data[2] = 0.123577;
+        data[3] = 0.006343;
+        data[4] = 0.013310;
+        data[5] = 0.000577;
+        data[6] = 0.000103;
+        data[7] = 0.057366;
+        data[8] = 0.057614;
+        data[9] = 0.740805;
+        struct NamedTensor *lastLayerOutput = Vector(Dimension("P", 10), data);
+
+        double *data2 = (double *)malloc(sizeof(double) * 10);
+        for (size_t i = 0; i < 10; i++) {
+            data2[i] = 0.000001f;
+        }
+        data2[9] = 1.0f;
+        struct NamedTensor *expectedVector = Vector(Dimension("Q", 10), data2);
 
         LossFunc *lossfunc = model->lossFunc;
         float loss = lossfunc->ops.forword(lossfunc, lastLayerOutput, expectedVector);
+
+        model->onLoss(model, loss);
 
         Optimizer *optimizer = model->optmizer;
         optimizer->ops.update(optimizer, model);
@@ -74,6 +94,10 @@ struct NNModel* model_fit(struct NNModel *model, struct Tensor *tensor, uint64_t
 
 struct NNModel* model_evaluate(struct NNModel *model) {
 
+}
+
+void model_onloss(struct NNModel *model, double loss) {
+    printf("LOSS: %f\n", loss);
 }
 
 struct NNModel *SequentialModel() {
@@ -90,6 +114,7 @@ struct NNModel *SequentialModel() {
     model->compile = model_compile;
     model->fit = model_fit;
     model->evaluate = model_evaluate;
+    model->onLoss = model_onloss;
 
     return model;
 }

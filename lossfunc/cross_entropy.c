@@ -3,12 +3,31 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
-float crossentropy_forword(struct LossFunc *func, struct NamedTensor *input, struct NamedTensor *expected) {
+double crossentropy_forword(struct LossFunc *func, struct NamedTensor *input, struct NamedTensor *expected) {
     printf("crossentropy_forword\n");
     struct LossFuncCrossEntropy *lossfunc = ContainerOf(func, LossFuncCrossEntropy, base);
-    // TODO:
-    return 0.0f;
+    if (input == NULL || expected == NULL) {
+        printf("input vector and expected vector should not be NULL!\n");
+        exit(0);
+    }
+    if (input->dimension_nums != 1 || expected->dimension_nums != 1) {
+        printf("cross entropy dimension should be 1!\n");
+        exit(0);
+    }
+    if (input->dimensions->size != expected->dimensions->size) {
+        printf("size of vector not equal!\n");
+        exit(0);
+    }
+    input->print(input);
+    expected->print(expected);
+    double loss = 0.0f;
+    for (size_t i = 0; i < input->dimensions->size; i++) {
+        loss += (input->data[i] * log2(expected->data[i]));
+    }
+
+    return -loss;
 }
 
 struct LossFunc *CrossEntropyLossFunc() {

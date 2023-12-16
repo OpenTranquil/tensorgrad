@@ -7,7 +7,7 @@ typedef enum LossFuncType {
     CROSS_ENTROPY
 } LossFuncType;
 
-typedef float (*LossFuncForword)(struct LossFunc *func, struct NamedTensor *input, struct NamedTensor *expected);
+typedef double (*LossFuncForword)(struct LossFunc *func, struct NamedTensor *input, struct NamedTensor *expected);
 
 typedef struct LossFuncOperations {
     LossFuncForword forword;
