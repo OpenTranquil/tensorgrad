@@ -87,7 +87,7 @@ void softMaxTest() {
     }
     struct NamedTensor *tensor = Vector(Dimension("x", 10), data);
     tensor->print(tensor);
-    ComputeNode *node = Softmax(tensor);
+    ComputeNode *node = Softmax(Variable(tensor, "input"));
     struct NamedTensor *probVector = Forword(node);
     if (probVector == NULL) {
         printf("softmax result should not be NULL!\n");

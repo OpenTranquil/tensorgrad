@@ -6,9 +6,12 @@
 
 struct NamedTensor *op_softmax_forword(struct ComputeNode *node) {
     ComputeNode *left = node->operator.unaryOperand;
+    NamedTensor *leftVal = forword(left);
 
-    return NULL;
     //TODO:
+    double *data = malloc(sizeof(double) * leftVal->dimensions->size);
+    NamedTensor *result = Vector(Dimension("x", 10), data);
+    return result;
 }
 
 struct NamedTensor *op_softmax_backword(struct ComputeNode *node) {
