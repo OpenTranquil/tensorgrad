@@ -75,9 +75,9 @@ void grad_test() {
     struct NamedTensor *exp_grad = fdx(xv, av, bv);
     printf("EXPECTED val:%f, grad:%f\n", *exp_val->data, *exp_grad->data);
 
-    // ComputeNode *x = Variable(xv, "x");
-    // ComputeNode *fx = Pow(Add(Mul(x, Param(av, "a")), Param(bv, "b")), Constant(Scalar(2.0f)));
-    // printf("ACTUAL2 val: %f, grad:%f\n", *Forword(fx)->data, *Backword(x)->data);
+    ComputeNode *x = Variable(xv, "x");
+    ComputeNode *fx = Pow(Add(Mul(x, Param(av, "a")), Param(bv, "b")), Constant(Scalar(2.0f)));
+    printf("ACTUAL2 val: %f, grad:%f\n", *Forword(fx)->data, *Backword(x)->data);
 }
 
 void softMaxTest() {
@@ -87,9 +87,13 @@ void softMaxTest() {
     }
     struct NamedTensor *tensor = Vector(Dimension("x", 10), data);
     tensor->print(tensor);
-    // ComputeNode *node = Softmax(tensor);
-    // struct NamedTensor *probVector = Forword(node);
-    // probVector->print(probVector);
+    ComputeNode *node = Softmax(tensor);
+    struct NamedTensor *probVector = Forword(node);
+    if (probVector == NULL) {
+        printf("softmax result should not be NULL!\n");
+        exit(0);
+    }
+    probVector->print(probVector);
 }
 
 int main(int argc, char *argv[]) {

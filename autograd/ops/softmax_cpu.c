@@ -6,6 +6,8 @@
 
 struct NamedTensor *op_softmax_forword(struct ComputeNode *node) {
     ComputeNode *left = node->operator.unaryOperand;
+
+    return NULL;
     //TODO:
 }
 

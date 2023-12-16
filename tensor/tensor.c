@@ -42,7 +42,7 @@ void tensor_print(struct NamedTensor *tensor) {
         exit(0);
     }
     if (tensor->dimension_nums == 1) {
-        printf("%s = [", tensor->dimensions->name);
+        printf("%s(%d) = [", tensor->dimensions->name, tensor->dimensions->size);
         for (size_t idx = 0; idx < tensor->dimensions->size; idx++) {
             if (idx == tensor->dimensions->size - 1) {
                 printf("%f", tensor->data[idx]);
