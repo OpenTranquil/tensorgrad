@@ -8,5 +8,6 @@
 * Cross-Entropy loss function
 * ADAM and SGD optimizer
 * ops forword and backwork operation support multi backend like cuda, cpu SIMD...
+* ONNX support
 * python interface
 * ...
