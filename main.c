@@ -73,7 +73,7 @@ void grad_test() {
     printf("a:%f, b:%f, x:%f \n", *av->data, *bv->data, *xv->data);
     struct NamedTensor *exp_val = fx(xv, av, bv);
     struct NamedTensor *exp_grad = fdx(xv, av, bv);
-    printf("EXPECTED val:%f, grad:%f\n", *exp_val->data, *exp_grad->data);
+    printf("EXPECTED val:%f, grad:%f\n", *exp_val->data, *exp_grad->data); 
 
     ComputeNode *x = Variable(xv, "x");
     ComputeNode *fx = Pow(Add(Mul(x, Param(av, "a")), Param(bv, "b")), Constant(Scalar(2.0f)));
@@ -83,7 +83,7 @@ void grad_test() {
 void softMaxTest() {
     double *data = (double *)malloc(sizeof(double) * 10);
     for (size_t i = 0; i < 10; i++) {
-        data[i] = frand(100.0f);
+        data[i] = frand(10.0f);
     }
     struct NamedTensor *tensor = Vector(Dimension("x", 10), data);
     tensor->print(tensor);
