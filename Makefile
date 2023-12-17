@@ -25,11 +25,15 @@ all: grad
 
 grad:	$(OBJS_AUTOGRAD)
 	$(CC) $(LDFLAGS) $(OBJS_AUTOGRAD) -o grad
+	rm -rf *.o
+	rm -rf */*.o
+	rm -rf */*/*.o
 
 *.o: *.c
 	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -rf autograd/*.o
-	rm -rf autograd/ops/*.o
+	rm -rf *.o
+	rm -rf */*.o
+	rm -rf */*/*.o
 	rm -rf grad

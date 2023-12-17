@@ -30,10 +30,10 @@ void minist() {
     tensor->data = data;
 
     NNModel *model = SequentialModel();
-    model->addLayer(model, Conv2D(32, Tuple(3, 3), ACTV_RELU));
-    model->addLayer(model, MaxPooling2D(Tuple(2,2), ACTV_NONE));
-    model->addLayer(model, Conv2D(64, Tuple(3, 3), ACTV_RELU));
-    model->addLayer(model, MaxPooling2D(Tuple(2,2), ACTV_NONE));
+    // model->addLayer(model, Conv2D(32, Tuple(3, 3), ACTV_RELU));
+    // model->addLayer(model, MaxPooling2D(Tuple(2,2), ACTV_NONE));
+    // model->addLayer(model, Conv2D(64, Tuple(3, 3), ACTV_RELU));
+    // model->addLayer(model, MaxPooling2D(Tuple(2,2), ACTV_NONE));
     model->addLayer(model, Flatten());
     model->addLayer(model, Dense(64, RELU));
     model->addLayer(model, Dense(10, SOFTMAX));
@@ -97,9 +97,48 @@ void softMaxTest() {
     probVector->print(probVector);
 }
 
+// SoftMax(A * X + B);
+void minNetTest() {
+    double *Xdata = (double *)AallocMem(sizeof(double) * 10);
+    for (size_t i = 0; i < 10; i++) {
+        Xdata[i] = frand(10.0f);
+    }
+    struct NamedTensor *X = Vector(Dimension("x", 32), Xdata);
+    X->print(X);
+
+    double *Adata = (double *)AallocMem(sizeof(double) * 10 * 32);
+    for (size_t i = 0; i < 10; i++) {
+        for (size_t j = 0; j < 32; j++) {
+            Adata[i * 32 + j] = frand(10.0f);
+        }
+    }
+    struct NamedTensor *A = Matrix(Dimension("x", 10), Dimension("y", 32), Adata);
+    A->print(A);
+
+
+    double *Bdata = (double *)AallocMem(sizeof(double) * 10 * 32);
+    for (size_t i = 0; i < 10; i++) {
+        for (size_t j = 0; j < 32; j++) {
+            Bdata[i * 32 + j] = frand(10.0f);
+        }
+    }
+    struct NamedTensor *B = Matrix(Dimension("x", 10), Dimension("y", 32), Bdata);
+    B->print(B);
+
+    ComputeNode *node = Softmax(Add(Mul(Param(A, "A"), Variable(X, "X")), Param(B, "B")));
+
+    struct NamedTensor *probVector = Forword(node);
+    if (probVector == NULL) {
+        printf("softmax result should not be NULL!\n");
+        exit(0);
+    }
+    probVector->print(probVector);
+}
+
 int main(int argc, char *argv[]) {
-    grad_test();
-    softMaxTest();
-    minist();
+    // grad_test();
+    // softMaxTest();
+    minNetTest();
+    // minist();
     return 0;
 }
