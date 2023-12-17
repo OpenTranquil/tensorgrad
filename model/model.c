@@ -61,7 +61,7 @@ struct NNModel* model_fit(struct NNModel *model, struct Tensor *tensor, uint64_t
         }
 
         //TODO:
-        double *data = (double *)AallocMem(sizeof(double) * 10);
+        double *data = (double *)AllocMem(sizeof(double) * 10);
         data[0] = 0.000065;
         data[1] = 0.000241;
         data[2] = 0.123577;
@@ -74,7 +74,7 @@ struct NNModel* model_fit(struct NNModel *model, struct Tensor *tensor, uint64_t
         data[9] = 0.740805;
         struct NamedTensor *lastLayerOutput = Vector(Dimension("P", 10), data);
 
-        double *data2 = (double *)AallocMem(sizeof(double) * 10);
+        double *data2 = (double *)AllocMem(sizeof(double) * 10);
         for (size_t i = 0; i < 10; i++) {
             data2[i] = 0.000001f;
         }
@@ -102,7 +102,7 @@ void model_onloss(struct NNModel *model, double loss) {
 }
 
 struct NNModel *SequentialModel() {
-    struct NNModel *model = (struct NNModel*)AallocMem(sizeof(NNModel));
+    struct NNModel *model = (struct NNModel*)AllocMem(sizeof(NNModel));
     if (model == NULL) {
         printf("model alloc failed!\n");
         exit(1);

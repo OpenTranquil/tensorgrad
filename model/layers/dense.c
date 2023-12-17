@@ -17,7 +17,7 @@ void dense_backword(struct Layer *layer) {
 }
 
 struct Layer *Dense(uint64_t units, ActivationType actv) {
-    struct DenseLayer *layer = (struct DenseLayer*)AallocMem(sizeof(DenseLayer));
+    struct DenseLayer *layer = (struct DenseLayer*)AllocMem(sizeof(DenseLayer));
     if (layer == NULL) {
         printf("dense layer alloc failed!\n");
         exit(1);

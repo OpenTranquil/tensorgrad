@@ -12,7 +12,7 @@ void sgd_optimize(struct Optimizer *optimizer, struct Model *model) {
 }
 
 struct Optimizer *OptmizerSGD() {
-    struct SGDOptimizer *optimizer = (struct SGDOptimizer*)AallocMem(sizeof(SGDOptimizer));
+    struct SGDOptimizer *optimizer = (struct SGDOptimizer*)AllocMem(sizeof(SGDOptimizer));
     if (optimizer == NULL) {
         printf("SGD Optimizer malloc failed!\n");
         exit(0);

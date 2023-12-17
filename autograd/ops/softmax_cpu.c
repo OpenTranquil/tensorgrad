@@ -18,7 +18,7 @@ struct NamedTensor *op_softmax_forword(struct ComputeNode *node) {
         }
     }
 
-    double *data = AallocMem(sizeof(double) * leftVal->dimensions->size);
+    double *data = AllocMem(sizeof(double) * leftVal->dimensions->size);
     for (size_t i = 0; i < leftVal->dimensions->size; i++) {
         data[i] = exp(leftVal->data[i] - max);
         expSum += data[i];
@@ -28,7 +28,7 @@ struct NamedTensor *op_softmax_forword(struct ComputeNode *node) {
         data[i] = data[i] / expSum;
     }
 
-    NamedTensor *result = Vector(Dimension("x", 10), data);
+    NamedTensor *result = Vector(Dimension("softmax_out", 10), data);
     return result;
 }
 
@@ -45,7 +45,7 @@ OperatorFunc op_softmax = {
 };
 
 ComputeNode *Softmax(ComputeNode *operand) {
-    ComputeNode *node = (ComputeNode *)AallocMem(sizeof(ComputeNode));
+    ComputeNode *node = (ComputeNode *)AllocMem(sizeof(ComputeNode));
     if (node == NULL) {
         printf("ComputeNode malloc failed!\n");
         exit(1);

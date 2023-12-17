@@ -41,7 +41,7 @@ OperatorFunc op_pow = {
 };
 
 ComputeNode *Pow(ComputeNode *left, ComputeNode *right) {
-    ComputeNode *node = (ComputeNode *)AallocMem(sizeof(ComputeNode));
+    ComputeNode *node = (ComputeNode *)AllocMem(sizeof(ComputeNode));
     if (node == NULL) {
         printf("ComputeNode malloc failed!\n");
         exit(1);

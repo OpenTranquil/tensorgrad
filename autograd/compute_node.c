@@ -6,7 +6,7 @@
 #include "compute_node.h"
 
 ComputeNode *Param(struct NamedTensor *init_val, const char *name) {
-    ComputeNode *node = (ComputeNode *)AallocMem(sizeof(ComputeNode));
+    ComputeNode *node = (ComputeNode *)AllocMem(sizeof(ComputeNode));
     if (node == NULL) {
         printf("ComputeNode malloc failed!\n");
         exit(1);
@@ -22,7 +22,7 @@ ComputeNode *Param(struct NamedTensor *init_val, const char *name) {
 }
 
 ComputeNode *Variable(struct NamedTensor *init_val, const char *name) {
-    ComputeNode *node = (ComputeNode *)AallocMem(sizeof(ComputeNode));
+    ComputeNode *node = (ComputeNode *)AllocMem(sizeof(ComputeNode));
     if (node == NULL) {
         printf("ComputeNode malloc failed!\n");
         exit(1);
@@ -38,7 +38,7 @@ ComputeNode *Variable(struct NamedTensor *init_val, const char *name) {
 }
 
 ComputeNode *Constant(struct NamedTensor *init_val) {
-    ComputeNode *node = (ComputeNode *)AallocMem(sizeof(ComputeNode));
+    ComputeNode *node = (ComputeNode *)AllocMem(sizeof(ComputeNode));
     if (node == NULL) {
         printf("ComputeNode malloc failed!\n");
         exit(1);

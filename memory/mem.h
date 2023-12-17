@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 
-void *AallocMem(size_t size);
+void *AllocMem(size_t size);
 void memfree(void *mem);
 
 #endif /* __MEM_H__ */

@@ -32,7 +32,7 @@ double crossentropy_forword(struct LossFunc *func, struct NamedTensor *input, st
 }
 
 struct LossFunc *CrossEntropyLossFunc() {
-    struct LossFuncCrossEntropy *loss = (struct LossFuncCrossEntropy *)AallocMem(sizeof(struct LossFuncCrossEntropy));
+    struct LossFuncCrossEntropy *loss = (struct LossFuncCrossEntropy *)AllocMem(sizeof(struct LossFuncCrossEntropy));
     if (loss == NULL) {
         printf("Cross Entropy loss func malloc failed!\n");
     }

@@ -10,10 +10,29 @@ struct NamedTensor *op_mul_forword(struct ComputeNode *node) {
     ComputeNode *right = node->operator.binaryOperand.right;
     NamedTensor *leftVal = forword(left);
     NamedTensor *rightVal = forword(right);
+
     if (leftVal->dimension_nums == 0 && rightVal->dimension_nums == 0) {
         return  Scalar(*leftVal->data * *rightVal->data);
     }
-    printf("TODO: not support vector and maxrix now!\n");
+    if (leftVal->dimension_nums == 1 && rightVal->dimension_nums == 2) {
+        DimensionDef *rightDimension1 = rightVal->dimensions;
+        DimensionDef *rightDimension2 = ContainerOf(rightVal->dimensions->node.next, DimensionDef, node);
+        if (leftVal->dimensions->size != rightDimension2->size) {
+            printf("Vector (%d) can not mul Matrix(%dx%d)!\n", leftVal->dimensions->size, rightDimension1->size, rightDimension2->size);
+            exit(0);
+        }
+        double *outData = AllocMem(rightDimension1->size * sizeof(double));
+        for (size_t i = 0; i < rightDimension1->size; i++) {
+            double val = 0.0f;
+            for (size_t j = 0; j < rightDimension2->size; j++) {
+                val += leftVal->data[j] * rightVal->data[i * rightDimension2->size + j];
+            }
+            outData[i] = val;
+        }
+        
+        NamedTensor *output = Vector(Dimension("mal_out", rightDimension1->size), outData);
+        return output;
+    }
     return NULL;
 }
 
@@ -38,7 +57,7 @@ OperatorFunc op_mul = {
 };
 
 ComputeNode *Mul(ComputeNode *left, ComputeNode *right) {
-    ComputeNode *node = (ComputeNode *)AallocMem(sizeof(ComputeNode));
+    ComputeNode *node = (ComputeNode *)AllocMem(sizeof(ComputeNode));
     if (node == NULL) {
         printf("ComputeNode malloc failed!\n");
         exit(1);

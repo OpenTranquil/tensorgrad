@@ -17,7 +17,7 @@ void flatten_backword(struct Layer *layer) {
 }
 
 struct Layer *Flatten() {
-    struct FlattenLayer *layer = (struct FlattenLayer*)AallocMem(sizeof(FlattenLayer));
+    struct FlattenLayer *layer = (struct FlattenLayer*)AllocMem(sizeof(FlattenLayer));
     if (layer == NULL) {
         printf("flatten layer alloc failed!\n");
         exit(1);

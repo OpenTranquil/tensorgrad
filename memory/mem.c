@@ -4,7 +4,7 @@
 
 uint64_t __MemUsed = 0;
 
-void *AallocMem(size_t size) {
+void *AllocMem(size_t size) {
     void *mem = malloc(size);
     if (mem != NULL) {
         __MemUsed += size;

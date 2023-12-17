@@ -25,7 +25,7 @@ void conv2d_backword(struct Layer *layer) {
 }
 
 static conv2d_unit_create(uint64_t width, uint64_t height) {
-    struct Conv2DUnit *unit = (struct Conv2DUnit*)AallocMem(sizeof(Conv2DUnit));
+    struct Conv2DUnit *unit = (struct Conv2DUnit*)AllocMem(sizeof(Conv2DUnit));
     if (unit == NULL) {
         printf("conv2d unit malloc failed!\n");
         exit(0);
@@ -34,7 +34,7 @@ static conv2d_unit_create(uint64_t width, uint64_t height) {
     unit->kernel.width = width;
     unit->kernel.height = height;
 
-    float *kernel_data = (float *)AallocMem(sizeof(float));
+    float *kernel_data = (float *)AllocMem(sizeof(float));
     if (kernel_data == NULL) {
         printf("conv2d kernel data malloc failed!\n");
         exit(0);
@@ -50,7 +50,7 @@ static conv2d_unit_create(uint64_t width, uint64_t height) {
 }
 
 struct Layer *Conv2D(uint64_t filters, TupleU64 *kernel_size, ActivationType actv) {
-    struct Conv2DLayer *layer = (struct Conv2DLayer*)AallocMem(sizeof(Conv2DLayer));
+    struct Conv2DLayer *layer = (struct Conv2DLayer*)AllocMem(sizeof(Conv2DLayer));
     if (layer == NULL) {
         printf("conv2d layer alloc failed!\n");
         exit(1);
@@ -70,7 +70,7 @@ struct Layer *Conv2D(uint64_t filters, TupleU64 *kernel_size, ActivationType act
             dlist_append_tail(&layer->units->node, &unit->node);
         }
 
-        struct Neuron *neuron = (struct Neuron*)AallocMem(sizeof(struct Neuron));
+        struct Neuron *neuron = (struct Neuron*)AllocMem(sizeof(struct Neuron));
         if (neuron == NULL) {
             printf("neuron malloc failed!\n");
             exit(0);

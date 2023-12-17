@@ -17,7 +17,7 @@
 
 void minist() {
     // TODO: load data
-    float *data = AallocMem(sizeof(float) * 28 * 28);
+    float *data = AllocMem(sizeof(float) * 28 * 28);
     for (size_t i = 0; i < 28; i++) {
         for (size_t j = 0; j < 28; j++) {
             data[i * 28 + j] = frand(255.0f);
@@ -82,7 +82,7 @@ void grad_test() {
 }
 
 void softMaxTest() {
-    double *data = (double *)AallocMem(sizeof(double) * 10);
+    double *data = (double *)AllocMem(sizeof(double) * 10);
     for (size_t i = 0; i < 10; i++) {
         data[i] = frand(10.0f);
     }
@@ -97,16 +97,16 @@ void softMaxTest() {
     probVector->print(probVector);
 }
 
-// SoftMax(A * X + B);
+// SoftMax(X * A + B);
 void minNetTest() {
-    double *Xdata = (double *)AallocMem(sizeof(double) * 10);
+    double *Xdata = (double *)AllocMem(sizeof(double) * 10);
     for (size_t i = 0; i < 10; i++) {
         Xdata[i] = frand(10.0f);
     }
     struct NamedTensor *X = Vector(Dimension("x", 32), Xdata);
     X->print(X);
 
-    double *Adata = (double *)AallocMem(sizeof(double) * 10 * 32);
+    double *Adata = (double *)AllocMem(sizeof(double) * 10 * 32);
     for (size_t i = 0; i < 10; i++) {
         for (size_t j = 0; j < 32; j++) {
             Adata[i * 32 + j] = frand(10.0f);
@@ -115,23 +115,23 @@ void minNetTest() {
     struct NamedTensor *A = Matrix(Dimension("x", 10), Dimension("y", 32), Adata);
     A->print(A);
 
-
-    double *Bdata = (double *)AallocMem(sizeof(double) * 10 * 32);
+    double *Bdata = (double *)AllocMem(sizeof(double) * 10 * 32);
     for (size_t i = 0; i < 10; i++) {
-        for (size_t j = 0; j < 32; j++) {
-            Bdata[i * 32 + j] = frand(10.0f);
-        }
+        Bdata[i] = frand(10.0f);
     }
-    struct NamedTensor *B = Matrix(Dimension("x", 10), Dimension("y", 32), Bdata);
+    struct NamedTensor *B = Vector(Dimension("x", 10), Bdata);
     B->print(B);
 
-    ComputeNode *node = Softmax(Add(Mul(Param(A, "A"), Variable(X, "X")), Param(B, "B")));
+    ComputeNode *mul = Mul(Variable(X, "X"), Param(A, "A"));
+    struct NamedTensor *mulVector = Forword(mul);
+    mulVector->print(mulVector);
 
+    ComputeNode *add = Add(Mul(Variable(X, "X"), Param(A, "A")), Param(B, "B"));
+    struct NamedTensor *addVector = Forword(add);
+    addVector->print(addVector);
+
+    ComputeNode *node = Softmax(Add(Mul(Variable(X, "X"), Param(A, "A")), Param(B, "B")));
     struct NamedTensor *probVector = Forword(node);
-    if (probVector == NULL) {
-        printf("softmax result should not be NULL!\n");
-        exit(0);
-    }
     probVector->print(probVector);
 }
 

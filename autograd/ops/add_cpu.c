@@ -13,6 +13,18 @@ struct NamedTensor *op_add_forword(struct ComputeNode *node) {
     if (leftVal->dimension_nums == 0 && rightVal->dimension_nums == 0) {
         return  Scalar(*leftVal->data + *rightVal->data);
     }
+    if (leftVal->dimension_nums == 1 && rightVal->dimension_nums == 1) {
+        if (leftVal->dimensions->size != rightVal->dimensions->size) {
+            printf("dimension  (%d) (%d) should equal!\n", leftVal->dimensions->size, rightVal->dimensions->size);
+            exit(0);
+        }
+        double *outData = AllocMem(sizeof(double) * leftVal->dimensions->size);
+        for (size_t i = 0; i < leftVal->dimensions->size; i++) {
+            outData[i] = leftVal->data[i] + rightVal->data[i];
+        }
+        NamedTensor *output = Vector(Dimension("add_out", leftVal->dimensions->size), outData);
+        return output;
+    }
     printf("TODO: not support vector and maxrix now!\n");
     return NULL;
 }
@@ -30,7 +42,7 @@ OperatorFunc op_add = {
 };
 
 ComputeNode *Add(ComputeNode *left, ComputeNode *right) {
-    ComputeNode *node = (ComputeNode *)AallocMem(sizeof(ComputeNode));
+    ComputeNode *node = (ComputeNode *)AllocMem(sizeof(ComputeNode));
     if (node == NULL) {
         printf("ComputeNode malloc failed!\n");
         exit(1);

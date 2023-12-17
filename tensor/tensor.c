@@ -15,7 +15,7 @@ struct DimensionDef *tensor_add_dimension(struct NamedTensor *tensor, struct Dim
 }
 
 struct DimensionDef *Dimension(const char* name, uint64_t size) {
-    DimensionDef *dimension = (DimensionDef*)AallocMem(sizeof(DimensionDef));
+    DimensionDef *dimension = (DimensionDef*)AllocMem(sizeof(DimensionDef));
     if (dimension == NULL) {
         printf("dimension malloc failed!\n");
         exit(0);
@@ -79,7 +79,7 @@ void tensor_print(struct NamedTensor *tensor) {
 }
 
 struct NamedTensor *Tensor() {
-    NamedTensor *tensor = (NamedTensor*)AallocMem(sizeof(NamedTensor));
+    NamedTensor *tensor = (NamedTensor*)AllocMem(sizeof(NamedTensor));
     if (tensor == NULL) {
         printf("named tensor malloc failed!\n");
         exit(0);
@@ -96,7 +96,7 @@ struct NamedTensor *Tensor() {
 
 struct NamedTensor *Scalar(double v) {
     NamedTensor *tensor = Tensor();
-    double *val = AallocMem(sizeof(double));
+    double *val = AllocMem(sizeof(double));
     if (val == NULL) {
         printf("scalar malloc failed!\n");
         exit(0);
