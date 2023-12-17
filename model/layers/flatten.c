@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "../../memory/mem.h"
 
 void flatten_forword(struct Layer *layer, struct Tensor *input) {
     printf("flatten_forword\n");
@@ -16,7 +17,7 @@ void flatten_backword(struct Layer *layer) {
 }
 
 struct Layer *Flatten() {
-    struct FlattenLayer *layer = (struct FlattenLayer*)malloc(sizeof(FlattenLayer));
+    struct FlattenLayer *layer = (struct FlattenLayer*)AallocMem(sizeof(FlattenLayer));
     if (layer == NULL) {
         printf("flatten layer alloc failed!\n");
         exit(1);

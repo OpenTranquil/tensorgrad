@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include "memory/mem.h"
 #include "common/random.h"
 #include "autograd/ops.h"
 #include "autograd/compute_node.h"
@@ -16,7 +17,7 @@
 
 void minist() {
     // TODO: load data
-    float *data = malloc(sizeof(float) * 28 * 28);
+    float *data = AallocMem(sizeof(float) * 28 * 28);
     for (size_t i = 0; i < 28; i++) {
         for (size_t j = 0; j < 28; j++) {
             data[i * 28 + j] = frand(255.0f);
@@ -81,7 +82,7 @@ void grad_test() {
 }
 
 void softMaxTest() {
-    double *data = (double *)malloc(sizeof(double) * 10);
+    double *data = (double *)AallocMem(sizeof(double) * 10);
     for (size_t i = 0; i < 10; i++) {
         data[i] = frand(10.0f);
     }

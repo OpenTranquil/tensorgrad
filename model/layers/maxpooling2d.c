@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "../../memory/mem.h"
 
 void maxpooling2d_forword(struct Layer *layer, struct Tensor *input) {
     printf("maxpooling2d_forword\n");
@@ -16,7 +17,7 @@ void maxpooling2d_backword(struct Layer *layer) {
 }
 
 struct Layer *MaxPooling2D(TupleU64 *kernel_size, ActivationType actv) {
-    struct MaxPooling2DLayer *layer = (struct MaxPooling2DLayer*)malloc(sizeof(MaxPooling2DLayer));
+    struct MaxPooling2DLayer *layer = (struct MaxPooling2DLayer*)AallocMem(sizeof(MaxPooling2DLayer));
     if (layer == NULL) {
         printf("max polling layer alloc failed!\n");
         exit(1);

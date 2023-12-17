@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include "../../memory/mem.h"
 #include "../ops.h"
 #include "../compute_node.h"
 
@@ -40,7 +41,7 @@ OperatorFunc op_pow = {
 };
 
 ComputeNode *Pow(ComputeNode *left, ComputeNode *right) {
-    ComputeNode *node = (ComputeNode *)malloc(sizeof(ComputeNode));
+    ComputeNode *node = (ComputeNode *)AallocMem(sizeof(ComputeNode));
     if (node == NULL) {
         printf("ComputeNode malloc failed!\n");
         exit(1);

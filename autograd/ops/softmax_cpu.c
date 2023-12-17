@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include "../../memory/mem.h"
 #include "../ops.h"
 #include "../compute_node.h"
 
@@ -17,7 +18,7 @@ struct NamedTensor *op_softmax_forword(struct ComputeNode *node) {
         }
     }
 
-    double *data = malloc(sizeof(double) * leftVal->dimensions->size);
+    double *data = AallocMem(sizeof(double) * leftVal->dimensions->size);
     for (size_t i = 0; i < leftVal->dimensions->size; i++) {
         data[i] = exp(leftVal->data[i] - max);
         expSum += data[i];
@@ -44,7 +45,7 @@ OperatorFunc op_softmax = {
 };
 
 ComputeNode *Softmax(ComputeNode *operand) {
-    ComputeNode *node = (ComputeNode *)malloc(sizeof(ComputeNode));
+    ComputeNode *node = (ComputeNode *)AallocMem(sizeof(ComputeNode));
     if (node == NULL) {
         printf("ComputeNode malloc failed!\n");
         exit(1);

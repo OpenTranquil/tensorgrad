@@ -19,7 +19,9 @@
         "grad.h": "c",
         "ops.h": "c",
         "compute_node.h": "c",
-        "ios": "c"
+        "ios": "c",
+        "mem.h": "c",
+        "neuron.h": "c"
     },
     "makefile.launchConfigurations": [
         {

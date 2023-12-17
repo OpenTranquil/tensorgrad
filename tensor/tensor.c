@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stddef.h>
+#include "../memory/mem.h"
 
 struct DimensionDef *tensor_add_dimension(struct NamedTensor *tensor, struct DimensionDef *dimension) {
     tensor->dimension_nums++;
@@ -14,7 +15,7 @@ struct DimensionDef *tensor_add_dimension(struct NamedTensor *tensor, struct Dim
 }
 
 struct DimensionDef *Dimension(const char* name, uint64_t size) {
-    DimensionDef *dimension = (DimensionDef*)malloc(sizeof(DimensionDef));
+    DimensionDef *dimension = (DimensionDef*)AallocMem(sizeof(DimensionDef));
     if (dimension == NULL) {
         printf("dimension malloc failed!\n");
         exit(0);
@@ -58,7 +59,7 @@ void tensor_print(struct NamedTensor *tensor) {
 }
 
 struct NamedTensor *Tensor() {
-    NamedTensor *tensor = (NamedTensor*)malloc(sizeof(NamedTensor));
+    NamedTensor *tensor = (NamedTensor*)AallocMem(sizeof(NamedTensor));
     if (tensor == NULL) {
         printf("named tensor malloc failed!\n");
         exit(0);
@@ -75,7 +76,7 @@ struct NamedTensor *Tensor() {
 
 struct NamedTensor *Scalar(double v) {
     NamedTensor *tensor = Tensor();
-    double *val = malloc(sizeof(double));
+    double *val = AallocMem(sizeof(double));
     if (val == NULL) {
         printf("scalar malloc failed!\n");
         exit(0);

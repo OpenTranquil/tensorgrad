@@ -1,5 +1,6 @@
 #include "sgd.h"
 #include "../common/dlist.h"
+#include "../memory/mem.h"
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -11,7 +12,7 @@ void sgd_optimize(struct Optimizer *optimizer, struct Model *model) {
 }
 
 struct Optimizer *OptmizerSGD() {
-    struct SGDOptimizer *optimizer = (struct SGDOptimizer*)malloc(sizeof(SGDOptimizer));
+    struct SGDOptimizer *optimizer = (struct SGDOptimizer*)AallocMem(sizeof(SGDOptimizer));
     if (optimizer == NULL) {
         printf("SGD Optimizer malloc failed!\n");
         exit(0);

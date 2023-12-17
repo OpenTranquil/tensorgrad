@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "../../memory/mem.h"
 
 void dense_forword(struct Layer *layer, struct Tensor *input) {
     printf("dense_forword\n");
@@ -16,7 +17,7 @@ void dense_backword(struct Layer *layer) {
 }
 
 struct Layer *Dense(uint64_t units, ActivationType actv) {
-    struct DenseLayer *layer = (struct DenseLayer*)malloc(sizeof(DenseLayer));
+    struct DenseLayer *layer = (struct DenseLayer*)AallocMem(sizeof(DenseLayer));
     if (layer == NULL) {
         printf("dense layer alloc failed!\n");
         exit(1);
