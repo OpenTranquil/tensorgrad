@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <time.h>
 #include <stdlib.h>
 #include "memory/mem.h"
 #include "common/random.h"
@@ -136,6 +137,8 @@ void minNetTest() {
 }
 
 int main(int argc, char *argv[]) {
+    srand((unsigned int)time(NULL));
+
     // grad_test();
     // softMaxTest();
     minNetTest();
