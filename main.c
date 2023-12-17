@@ -102,7 +102,7 @@ void softMaxTest() {
 void minNetTest() {
     double *Xdata = (double *)AllocMem(sizeof(double) * 10);
     for (size_t i = 0; i < 10; i++) {
-        Xdata[i] = frand(1.0f);
+        Xdata[i] = frand(10.0f);
     }
     struct NamedTensor *X = Vector(Dimension("X", 32), Xdata);
     X->print(X);
@@ -123,15 +123,19 @@ void minNetTest() {
     struct NamedTensor *B = Vector(Dimension("B", 10), Bdata);
     B->print(B);
 
-    ComputeNode *mul = Mul(Variable(X, "X"), Param(A, "A"));
+    ComputeNode *relu = ReLU(Variable(X, "X"));
+    struct NamedTensor *reluVector = Forword(relu);
+    reluVector->print(reluVector);
+
+    ComputeNode *mul = Mul(ReLU(Variable(X, "X")), Param(A, "A"));
     struct NamedTensor *mulVector = Forword(mul);
     mulVector->print(mulVector);
 
-    ComputeNode *add = Add(Mul(Variable(X, "X"), Param(A, "A")), Param(B, "B"));
+    ComputeNode *add = Add(Mul(ReLU(Variable(X, "X")), Param(A, "A")), Param(B, "B"));
     struct NamedTensor *addVector = Forword(add);
     addVector->print(addVector);
 
-    ComputeNode *node = Softmax(Add(Mul(Variable(X, "X"), Param(A, "A")), Param(B, "B")));
+    ComputeNode *node = Softmax(Add(Mul(ReLU(Variable(X, "X")), Param(A, "A")), Param(B, "B")));
     struct NamedTensor *probVector = Forword(node);
     probVector->print(probVector);
 

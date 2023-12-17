@@ -8,6 +8,7 @@ OBJS_AUTOGRAD = memory/mem.o 	\
 				autograd/ops/add_cpu.o	\
 				autograd/ops/mul_cpu.o	\
 				autograd/ops/pow_cpu.o	\
+				autograd/ops/relu_cpu.o	\
 				autograd/ops/softmax_cpu.o	\
 				autograd/compute_node.o	\
 				tensor/tensor.o \

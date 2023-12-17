@@ -21,7 +21,11 @@
         "compute_node.h": "c",
         "ios": "c",
         "mem.h": "c",
-        "neuron.h": "c"
+        "neuron.h": "c",
+        "array": "c",
+        "string": "c",
+        "string_view": "c",
+        "vector": "c"
     },
     "makefile.launchConfigurations": [
         {
