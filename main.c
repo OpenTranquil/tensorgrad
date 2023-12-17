@@ -102,9 +102,9 @@ void softMaxTest() {
 void minNetTest() {
     double *Xdata = (double *)AllocMem(sizeof(double) * 10);
     for (size_t i = 0; i < 10; i++) {
-        Xdata[i] = frand(10.0f);
+        Xdata[i] = frand(1.0f);
     }
-    struct NamedTensor *X = Vector(Dimension("x", 32), Xdata);
+    struct NamedTensor *X = Vector(Dimension("X", 32), Xdata);
     X->print(X);
 
     double *Adata = (double *)AllocMem(sizeof(double) * 10 * 32);
@@ -113,14 +113,14 @@ void minNetTest() {
             Adata[i * 32 + j] = frand(10.0f);
         }
     }
-    struct NamedTensor *A = Matrix(Dimension("x", 10), Dimension("y", 32), Adata);
+    struct NamedTensor *A = Matrix(Dimension("H", 10), Dimension("W", 32), Adata);
     A->print(A);
 
     double *Bdata = (double *)AllocMem(sizeof(double) * 10 * 32);
     for (size_t i = 0; i < 10; i++) {
         Bdata[i] = frand(10.0f);
     }
-    struct NamedTensor *B = Vector(Dimension("x", 10), Bdata);
+    struct NamedTensor *B = Vector(Dimension("B", 10), Bdata);
     B->print(B);
 
     ComputeNode *mul = Mul(Variable(X, "X"), Param(A, "A"));
@@ -134,6 +134,18 @@ void minNetTest() {
     ComputeNode *node = Softmax(Add(Mul(Variable(X, "X"), Param(A, "A")), Param(B, "B")));
     struct NamedTensor *probVector = Forword(node);
     probVector->print(probVector);
+
+    double *expectedData = (double *)AllocMem(sizeof(double) * 10);
+    for (size_t i = 0; i < 10; i++) {
+        expectedData[i] = 0.0f;
+    }
+    expectedData[4] = 1.0f;
+    NamedTensor *expectedVec = Vector(Dimension("expected", 10), expectedData);
+    expectedVec->print(expectedVec);
+
+    LossFunc *lossFunc = CrossEntropyLossFunc();
+    double loss = lossFunc->ops.forword(lossFunc, probVector, expectedVec);
+    printf("LOSS: %f\n", loss);
 }
 
 int main(int argc, char *argv[]) {

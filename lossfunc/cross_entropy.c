@@ -7,7 +7,6 @@
 #include <math.h>
 
 double crossentropy_forword(struct LossFunc *func, struct NamedTensor *input, struct NamedTensor *expected) {
-    printf("crossentropy_forword\n");
     struct LossFuncCrossEntropy *lossfunc = ContainerOf(func, LossFuncCrossEntropy, base);
     if (input == NULL || expected == NULL) {
         printf("input vector and expected vector should not be NULL!\n");
@@ -21,11 +20,9 @@ double crossentropy_forword(struct LossFunc *func, struct NamedTensor *input, st
         printf("size of vector not equal!\n");
         exit(0);
     }
-    input->print(input);
-    expected->print(expected);
     double loss = 0.0f;
     for (size_t i = 0; i < input->dimensions->size; i++) {
-        loss += (input->data[i] * log2(expected->data[i]));
+        loss += (expected->data[i] * log2(input->data[i]));
     }
 
     return -loss;
