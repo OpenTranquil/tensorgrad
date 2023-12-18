@@ -82,7 +82,14 @@ void grad_test() {
     printf("ACTUAL2 val: %f, grad:%f\n", *Forword(fx)->data, *Backword(x)->data);
 }
 
-// SoftMax(ReLU(X) * A + B);
+//F = SoftMax(ReLU(X) * A + B);
+//F1 = ReLU(X) * A + B
+//F2 = ReLU(X) * A
+//F3 = ReLU(X)
+//F = SoftMax(F1)
+//F1 = F2 + B
+//F2 = F3 * A
+//F'A = F'F1 * F1'F2 * F2'A
 void minNetTest() {
     double *Xdata = (double *)AllocMem(sizeof(double) * 10);
     for (size_t i = 0; i < 10; i++) {
