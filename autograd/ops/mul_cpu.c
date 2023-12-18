@@ -43,7 +43,11 @@ struct NamedTensor *op_mul_backword(struct ComputeNode *node) {
     if (rightVal->dimension_nums == 0) {
         double gradVal = *rightVal->data * *left->grad->data;
         // FIXME: memory leak below
-        node->grad = Scalar(gradVal);
+        if (node->grad == NULL) {
+            node->grad = Scalar(gradVal);
+        } else {
+            *node->grad->data = gradVal;
+        }
         return node->grad;
     }
     printf("TODO: not support vector and maxrix now!\n");

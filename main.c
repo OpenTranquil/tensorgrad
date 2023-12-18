@@ -82,23 +82,7 @@ void grad_test() {
     printf("ACTUAL2 val: %f, grad:%f\n", *Forword(fx)->data, *Backword(x)->data);
 }
 
-void softMaxTest() {
-    double *data = (double *)AllocMem(sizeof(double) * 10);
-    for (size_t i = 0; i < 10; i++) {
-        data[i] = frand(10.0f);
-    }
-    struct NamedTensor *tensor = Vector(Dimension("x", 10), data);
-    tensor->print(tensor);
-    ComputeNode *node = Softmax(Variable(tensor, "input"));
-    struct NamedTensor *probVector = Forword(node);
-    if (probVector == NULL) {
-        printf("softmax result should not be NULL!\n");
-        exit(0);
-    }
-    probVector->print(probVector);
-}
-
-// SoftMax(X * A + B);
+// SoftMax(ReLU(X) * A + B);
 void minNetTest() {
     double *Xdata = (double *)AllocMem(sizeof(double) * 10);
     for (size_t i = 0; i < 10; i++) {
@@ -123,19 +107,9 @@ void minNetTest() {
     struct NamedTensor *B = Vector(Dimension("B", 10), Bdata);
     B->print(B);
 
-    ComputeNode *relu = ReLU(Variable(X, "X"));
-    struct NamedTensor *reluVector = Forword(relu);
-    reluVector->print(reluVector);
-
-    ComputeNode *mul = Mul(ReLU(Variable(X, "X")), Param(A, "A"));
-    struct NamedTensor *mulVector = Forword(mul);
-    mulVector->print(mulVector);
-
-    ComputeNode *add = Add(Mul(ReLU(Variable(X, "X")), Param(A, "A")), Param(B, "B"));
-    struct NamedTensor *addVector = Forword(add);
-    addVector->print(addVector);
-
-    ComputeNode *node = Softmax(Add(Mul(ReLU(Variable(X, "X")), Param(A, "A")), Param(B, "B")));
+    ComputeNode *paramA = Param(A, "A");
+    ComputeNode *paramB = Param(B, "B");
+    ComputeNode *node = Softmax(Add(Mul(ReLU(Variable(X, "X")), paramA), paramB));
     struct NamedTensor *probVector = Forword(node);
     probVector->print(probVector);
 
@@ -150,13 +124,14 @@ void minNetTest() {
     LossFunc *lossFunc = CrossEntropyLossFunc();
     double loss = lossFunc->ops.forword(lossFunc, probVector, expectedVec);
     printf("LOSS: %f\n", loss);
+
+    Backword(paramA);
 }
 
 int main(int argc, char *argv[]) {
     srand((unsigned int)time(NULL));
 
-    // grad_test();
-    // softMaxTest();
+    grad_test();
     minNetTest();
     // minist();
     return 0;
