@@ -68,6 +68,13 @@ struct NamedTensor *fdx(struct NamedTensor *x, struct NamedTensor *a, struct Nam
     return NULL;
 }
 
+//       pow
+//       / \
+//      +   2
+//     / \
+//    *   b
+//   / \
+//  a   x
 void grad_test() {
     struct NamedTensor *av = Scalar(5.1f);
     struct NamedTensor *xv = Scalar(6.3f);
@@ -77,8 +84,8 @@ void grad_test() {
     struct NamedTensor *exp_grad = fdx(xv, av, bv);
     printf("EXPECTED val:%f, grad:%f\n", *exp_val->data, *exp_grad->data); 
 
-    ComputeNode *x = Variable(xv, "x");
-    ComputeNode *fx = Pow(Add(Mul(x, Param(av, "a")), Param(bv, "b")), Constant(Scalar(2.0f)));
+    ComputeNode *x = Param(xv, "x");
+    ComputeNode *fx = Pow(Add(Mul(x, Variable(av, "a")), Variable(bv, "b")), Constant(Scalar(2.0f)));
     printf("ACTUAL2 val: %f, grad:%f\n", *Forword(fx)->data, *Backword(x)->data);
 }
 

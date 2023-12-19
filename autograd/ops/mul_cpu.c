@@ -39,9 +39,18 @@ struct NamedTensor *op_mul_forword(struct ComputeNode *node) {
 struct NamedTensor *op_mul_backword(struct ComputeNode *node) {
     ComputeNode *right = node->operator.binaryOperand.right;
     ComputeNode *left = node->operator.binaryOperand.left;
+    NamedTensor *leftVal = forword(left);
     NamedTensor *rightVal = forword(right);
     if (rightVal->dimension_nums == 0) {
-        double gradVal = *rightVal->data * *left->grad->data;
+        double gradVal = 1.0f;
+        if (left->requireGrad) {
+            gradVal = *rightVal->data * *left->grad->data;
+        } else if (right->requireGrad) {
+            gradVal = *leftVal->data * *right->grad->data;
+        } else {
+            printf("No operand required gard in mul operation?!\n");
+            exit(1);
+        }
         // FIXME: memory leak below
         if (node->grad == NULL) {
             node->grad = Scalar(gradVal);

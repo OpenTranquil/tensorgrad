@@ -25,7 +25,18 @@ struct NamedTensor *op_pow_backword(struct ComputeNode *node) {
     NamedTensor *leftVal = forword(left);
     NamedTensor *rightVal = forword(right);
     if (leftVal->dimension_nums == 0 && rightVal->dimension_nums == 0) {
-        double gradVal = *rightVal->data * *leftVal->data * *left->grad->data;
+        double gradVal = 1.0f;
+        if (left->requireGrad) {
+            // (x^a)'=(ax)
+            gradVal = *rightVal->data * *leftVal->data * *left->grad->data;
+        } else if (right->requireGrad) {
+            // (a^x)'=(lna)(a^x)
+            gradVal = log(*leftVal->data) * pow(*leftVal->data, *rightVal->data) * *right->grad->data;
+            
+        } else {
+            printf("No operand required gard in pow operation?!\n");
+            exit(1);
+        }
         // FIXME: memory leak below
         if (node->grad == NULL) {
             node->grad = Scalar(gradVal);

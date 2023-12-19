@@ -7,6 +7,7 @@
 
 typedef enum NodeType {
     VARIABLE = 0,
+    PARAM,
     CONSTANT,
     UNARY_OPERATOR,
     BINARY_OPERATOR,
@@ -50,10 +51,7 @@ typedef struct ComputeNode {
         struct {
             struct NamedTensor *val;
             const char *name;
-        } variable;
-        struct {
-            struct NamedTensor *val;
-        } constant;
+        } value;
     };
 } ComputeNode;
 
