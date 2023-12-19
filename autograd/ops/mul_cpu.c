@@ -44,8 +44,10 @@ struct NamedTensor *op_mul_backword(struct ComputeNode *node) {
     if (rightVal->dimension_nums == 0) {
         double gradVal = 1.0f;
         if (left->requireGrad) {
+            // (x*a)'=a
             gradVal = *rightVal->data * *left->grad->data;
         } else if (right->requireGrad) {
+            // (a*x)'=a
             gradVal = *leftVal->data * *right->grad->data;
         } else {
             printf("No operand required gard in mul operation?!\n");
