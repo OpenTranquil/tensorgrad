@@ -12,16 +12,21 @@ double crossentropy_forword(struct LossFunc *func, struct NamedTensor *input, st
         printf("input vector and expected vector should not be NULL!\n");
         exit(0);
     }
-    if (input->dimension_nums != 1 || expected->dimension_nums != 1) {
+    if (input->type != TENSOR_TYPE_ROW_VECTOR || expected->type != TENSOR_TYPE_ROW_VECTOR) {
         printf("cross entropy dimension should be 1!\n");
         exit(0);
     }
-    if (input->dimensions->size != expected->dimensions->size) {
+
+    DimensionDef *leftHeight = input->dimensions;
+    DimensionDef *leftWidth = ContainerOf(leftHeight->node.next, DimensionDef, node);
+    DimensionDef *rightHeight = expected->dimensions;
+    DimensionDef *rightWidth = ContainerOf(rightHeight->node.next, DimensionDef, node);
+    if (leftWidth->size != leftWidth->size) {
         printf("size of vector not equal!\n");
         exit(0);
     }
     double loss = 0.0f;
-    for (size_t i = 0; i < input->dimensions->size; i++) {
+    for (size_t i = 0; i < leftWidth->size; i++) {
         loss += (expected->data[i] * log2(input->data[i]));
     }
 

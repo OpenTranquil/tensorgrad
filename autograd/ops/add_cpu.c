@@ -10,19 +10,43 @@ struct NamedTensor *op_add_forword(struct ComputeNode *node) {
     ComputeNode *right = node->operator.binaryOperand.right;
     NamedTensor *leftVal = forword(left);
     NamedTensor *rightVal = forword(right);
-    if (leftVal->dimension_nums == 0 && rightVal->dimension_nums == 0) {
+    if (leftVal->type == TENSOR_TYPE_SCALAR && rightVal->type == TENSOR_TYPE_SCALAR) {
         return  Scalar(*leftVal->data + *rightVal->data);
     }
-    if (leftVal->dimension_nums == 1 && rightVal->dimension_nums == 1) {
-        if (leftVal->dimensions->size != rightVal->dimensions->size) {
+    if (leftVal->type == TENSOR_TYPE_ROW_VECTOR && rightVal->type == TENSOR_TYPE_ROW_VECTOR) {
+        if (leftVal->dimensions->size != rightVal->dimensions->size) { // should be 1
             printf("dimension  (%d) (%d) should equal!\n", leftVal->dimensions->size, rightVal->dimensions->size);
+            exit(0);
+        }
+        DimensionDef *leftWidth = ContainerOf(leftVal->dimensions->node.next, DimensionDef, node);
+        DimensionDef *rightWidth = ContainerOf(rightVal->dimensions->node.next, DimensionDef, node);
+        if (leftWidth->size != rightWidth->size) {
+            printf("dimension  (%d) (%d) should equal!\n", leftWidth->size, rightWidth->size);
+            exit(0);
+        }
+        double *outData = AllocMem(sizeof(double) * leftWidth->size);
+        for (size_t i = 0; i < leftWidth->size; i++) {
+            outData[i] = leftVal->data[i] + rightVal->data[i];
+        }
+        NamedTensor *output = RowVector(Dimension("add_out", leftWidth->size), outData);
+        return output;
+    }
+    if (leftVal->type == TENSOR_TYPE_COLUMN_VECTOR && rightVal->type == TENSOR_TYPE_COLUMN_VECTOR) {
+        if (leftVal->dimensions->size != rightVal->dimensions->size) {
+            printf("dimension (%d) (%d) should equal!\n", leftVal->dimensions->size, rightVal->dimensions->size);
+            exit(0);
+        }
+        DimensionDef *leftWidth = ContainerOf(leftVal->dimensions->node.next, DimensionDef, node);
+        DimensionDef *rightWidth = ContainerOf(rightVal->dimensions->node.next, DimensionDef, node);
+        if (leftWidth->size != rightWidth->size) {
+            printf("dimension (%d) (%d) should equal!\n", leftWidth->size, rightWidth->size);
             exit(0);
         }
         double *outData = AllocMem(sizeof(double) * leftVal->dimensions->size);
         for (size_t i = 0; i < leftVal->dimensions->size; i++) {
             outData[i] = leftVal->data[i] + rightVal->data[i];
         }
-        NamedTensor *output = Vector(Dimension("add_out", leftVal->dimensions->size), outData);
+        NamedTensor *output = ColumnVector(Dimension("add_out", leftVal->dimensions->size), outData);
         return output;
     }
     printf("TODO: not support vector and maxrix now!\n");

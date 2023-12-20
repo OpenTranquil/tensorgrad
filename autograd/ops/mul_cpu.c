@@ -11,27 +11,65 @@ struct NamedTensor *op_mul_forword(struct ComputeNode *node) {
     NamedTensor *leftVal = forword(left);
     NamedTensor *rightVal = forword(right);
 
-    if (leftVal->dimension_nums == 0 && rightVal->dimension_nums == 0) {
+    if (leftVal->type == TENSOR_TYPE_SCALAR && rightVal->type == TENSOR_TYPE_SCALAR) {
         return  Scalar(*leftVal->data * *rightVal->data);
     }
-    if (leftVal->dimension_nums == 1 && rightVal->dimension_nums == 2) {
-        DimensionDef *rightDimension1 = rightVal->dimensions;
-        DimensionDef *rightDimension2 = ContainerOf(rightVal->dimensions->node.next, DimensionDef, node);
-        if (leftVal->dimensions->size != rightDimension2->size) {
-            printf("Vector (%d) can not mul Matrix(%dx%d)!\n", leftVal->dimensions->size, rightDimension1->size, rightDimension2->size);
+    if (leftVal->type == TENSOR_TYPE_ROW_VECTOR && rightVal->type == TENSOR_TYPE_ROW_VECTOR) {
+        // TODO
+    }
+    if (leftVal->type == TENSOR_TYPE_COLUMN_VECTOR && rightVal->type == TENSOR_TYPE_COLUMN_VECTOR) {
+        // TODO
+    }
+    //           [ q w e ]   [bq + nw + em]
+    // [b n m] * [ a s d ] = [ba + ns + md]
+    //           [ z x c ]   [bz + xn + mc]
+    if (leftVal->type == TENSOR_TYPE_ROW_VECTOR && rightVal->type == TENSOR_TYPE_MATRIX) {
+        DimensionDef *leftHeight = leftVal->dimensions;
+        DimensionDef *leftWidth = ContainerOf(leftHeight->node.next, DimensionDef, node);
+        DimensionDef *rightHeight = rightVal->dimensions;
+        DimensionDef *rightWidth = ContainerOf(rightHeight->node.next, DimensionDef, node);
+        if (leftWidth->size != rightWidth->size) {
+            printf("Vector (%d) can not mul Matrix(%dx%d)!\n", leftWidth->size, rightHeight->size, rightWidth->size);
             exit(0);
         }
-        double *outData = AllocMem(rightDimension1->size * sizeof(double));
-        for (size_t i = 0; i < rightDimension1->size; i++) {
+        double *outData = AllocMem(rightHeight->size * sizeof(double));
+        for (size_t i = 0; i < rightHeight->size; i++) {
             double val = 0.0f;
-            for (size_t j = 0; j < rightDimension2->size; j++) {
-                val += leftVal->data[j] * rightVal->data[i * rightDimension2->size + j];
+            for (size_t j = 0; j < rightWidth->size; j++) {
+                val += leftVal->data[j] * rightVal->data[i * rightWidth->size + j];
             }
             outData[i] = val;
         }
         
-        NamedTensor *output = Vector(Dimension("mal_out", rightDimension1->size), outData);
+        NamedTensor *output = ColumnVector(Dimension("mul_out", rightHeight->size), outData);
         return output;
+    }
+    //  [ q w e ]             [bq + nw + em]
+    //  [ a s d ] * [b n m] = [ba + ns + md]
+    //  [ z x c ]             [bz + xn + mc]
+    if (leftVal->type == TENSOR_TYPE_MATRIX && rightVal->type == TENSOR_TYPE_ROW_VECTOR) {
+        DimensionDef *leftHeight = leftVal->dimensions;
+        DimensionDef *leftWidth = ContainerOf(leftHeight->node.next, DimensionDef, node);
+        DimensionDef *rightHeight = rightVal->dimensions;
+        DimensionDef *rightWidth = ContainerOf(rightHeight->node.next, DimensionDef, node);
+        if (leftWidth->size != rightWidth->size) {
+            printf("Matrix (%dx%d) can not mul Vector(%d)!\n", leftHeight->size, leftWidth->size, rightWidth->size);
+            exit(0);
+        }
+        double *outData = AllocMem(leftHeight->size * sizeof(double));
+        for (size_t i = 0; i < leftHeight->size; i++) {
+            double val = 0.0f;
+            for (size_t j = 0; j < leftWidth->size; j++) {
+                val += rightVal->data[j] * leftVal->data[i * leftWidth->size + j];
+            }
+            outData[i] = val;
+        }
+
+        NamedTensor *output = ColumnVector(Dimension("mul_out", leftWidth->size), outData);
+        return output;
+    }
+    if (leftVal->type == TENSOR_TYPE_MATRIX && rightVal->type == TENSOR_TYPE_MATRIX) {
+        // TODO
     }
     return NULL;
 }
@@ -41,7 +79,7 @@ struct NamedTensor *op_mul_backword(struct ComputeNode *node) {
     ComputeNode *left = node->operator.binaryOperand.left;
     NamedTensor *leftVal = forword(left);
     NamedTensor *rightVal = forword(right);
-    if (rightVal->dimension_nums == 0) {
+    if (leftVal->type == TENSOR_TYPE_SCALAR && rightVal->type == TENSOR_TYPE_SCALAR) {
         double gradVal = 1.0f;
         if (left->requireGrad) {
             // (x*a)'=a
@@ -61,6 +99,8 @@ struct NamedTensor *op_mul_backword(struct ComputeNode *node) {
         }
         return node->grad;
     }
+
+
     printf("TODO: not support vector and maxrix now!\n");
     return NULL;
 }

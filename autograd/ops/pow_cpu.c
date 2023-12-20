@@ -11,7 +11,7 @@ struct NamedTensor *op_pow_forword(struct ComputeNode *node) {
     ComputeNode *right = node->operator.binaryOperand.right;
     NamedTensor *leftVal = forword(left);
     NamedTensor *rightVal = forword(right);
-    if (leftVal->dimension_nums == 0 && rightVal->dimension_nums == 0) {
+    if (leftVal->type == TENSOR_TYPE_SCALAR && rightVal->type == TENSOR_TYPE_SCALAR) {
         // FIXME: memory leak below
         return Scalar(pow(*leftVal->data, *rightVal->data));
     }
@@ -24,7 +24,7 @@ struct NamedTensor *op_pow_backword(struct ComputeNode *node) {
     ComputeNode *right = node->operator.binaryOperand.right;
     NamedTensor *leftVal = forword(left);
     NamedTensor *rightVal = forword(right);
-    if (leftVal->dimension_nums == 0 && rightVal->dimension_nums == 0) {
+    if (leftVal->type == TENSOR_TYPE_SCALAR && rightVal->type == TENSOR_TYPE_SCALAR) {
         double gradVal = 1.0f;
         if (left->requireGrad) {
             // (x^a)'=(ax)

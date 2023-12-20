@@ -8,15 +8,19 @@
 struct NamedTensor *op_relu_forword(struct ComputeNode *node) {
     ComputeNode *operand = node->operator.unaryOperand;
     NamedTensor *operandVal = forword(operand);
-    if (operandVal->dimension_nums == 1) {
-        double *outData = AllocMem(sizeof(double) * operandVal->dimensions->size);
-        for (size_t i = 0; i < operandVal->dimensions->size; i++) {
+    if (operandVal->type == TENSOR_TYPE_ROW_VECTOR) {
+        DimensionDef *width = ContainerOf(operandVal->dimensions->node.next, DimensionDef, node);
+        double *outData = AllocMem(sizeof(double) * width->size);
+        for (size_t i = 0; i < width->size; i++) {
             outData[i] = operandVal->data[i] > 0.0f ? operandVal->data[i] : 0.0f;
         }
-        NamedTensor *output = Vector(Dimension("relu_out", operandVal->dimensions->size), outData);
+        NamedTensor *output = RowVector(Dimension("relu_out", width->size), outData);
         return output;
     }
-    if (operandVal->dimension_nums == 2) {
+    if (operandVal->type == TENSOR_TYPE_COLUMN_VECTOR) {
+        // TODO
+    }
+    if (operandVal->type == TENSOR_TYPE_MATRIX) {
         // TODO
     }
     return NULL;

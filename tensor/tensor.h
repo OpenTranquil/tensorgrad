@@ -4,6 +4,14 @@
 #include <stdint.h>
 #include "../common/dlist.h"
 
+typedef enum TensorType {
+    TENSOR_TYPE_SCALAR,
+    TENSOR_TYPE_ROW_VECTOR,
+    TENSOR_TYPE_COLUMN_VECTOR,
+    TENSOR_TYPE_MATRIX,
+    TENSOR_TYPE_TENSOR
+} TensorType;
+
 typedef struct DimensionDef {
     struct ListNode node;
     const char *name;
@@ -14,6 +22,7 @@ typedef struct DimensionDef *(*TensorAddDimension)(struct NamedTensor *tensor, s
 typedef void (*TensorPrint)(struct NamedTensor *tensor);
 
 typedef struct NamedTensor {
+    TensorType type;
     TensorAddDimension addDimension;
     TensorPrint print;
     uint64_t dimension_nums;
@@ -25,6 +34,8 @@ struct DimensionDef *Dimension(const char* name, uint64_t size);
 struct NamedTensor *Tensor();
 struct NamedTensor *Scalar(double v);
 struct NamedTensor *Vector(struct DimensionDef *dimension, double *vector);
+struct NamedTensor *ColumnVector(struct DimensionDef *dimension, double *vector);
+struct NamedTensor *RowVector(struct DimensionDef *dimension, double *vector);
 struct NamedTensor *Matrix(struct DimensionDef *dimension1, struct DimensionDef *dimension2, double *matrix);
 
 #endif /* __TENSOR_H__ */

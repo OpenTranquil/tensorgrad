@@ -14,7 +14,8 @@ struct NamedTensor *backward(ComputeNode *node) {
     ComputeNode *cur = node;
     while (cur != NULL) {
         if (cur->type == VARIABLE) {
-            cur->grad = Scalar(1.0f);
+            printf("cannot compute grad for variable!\n");
+            exit(1);
         }
         if (cur->type == CONSTANT) {
             printf("cannot compute grad for constant!\n");

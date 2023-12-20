@@ -31,7 +31,7 @@ void tensor_print(struct NamedTensor *tensor) {
         printf("NULL\n");
         return;
     }
-    if (tensor->dimension_nums == 0) {
+    if (tensor->type == TENSOR_TYPE_SCALAR) {
         printf("%f\n", *tensor->data);
     }
     if (tensor->dimensions == NULL) {
@@ -42,10 +42,11 @@ void tensor_print(struct NamedTensor *tensor) {
         printf("tensor's data should not be NULL!\n");
         exit(0);
     }
-    if (tensor->dimension_nums == 1) {
-        printf("%s(%d) = [", tensor->dimensions->name, tensor->dimensions->size);
-        for (size_t idx = 0; idx < tensor->dimensions->size; idx++) {
-            if (idx == tensor->dimensions->size - 1) {
+    if (tensor->type == TENSOR_TYPE_ROW_VECTOR) {
+        DimensionDef *width = ContainerOf(tensor->dimensions->node.next, DimensionDef, node);
+        printf("%s(%d) = [", width->name, width->size);
+        for (size_t idx = 0; idx < width->size; idx++) {
+            if (idx == width->size - 1) {
                 printf("%f", tensor->data[idx]);
             } else {
                 printf("%f, ", tensor->data[idx]);
@@ -54,7 +55,21 @@ void tensor_print(struct NamedTensor *tensor) {
         printf("]\n");
     }
 
-    if (tensor->dimension_nums == 2) {
+    if (tensor->type == TENSOR_TYPE_COLUMN_VECTOR) {
+        DimensionDef *height = tensor->dimensions;
+        DimensionDef *width = ContainerOf(tensor->dimensions->node.next, DimensionDef, node);
+        printf("%s(%d) = [", height->name, height->size);
+        for (size_t idx = 0; idx < height->size; idx++) {
+            if (idx == height->size - 1) {
+                printf("%f", tensor->data[idx]);
+            } else {
+                printf("%f,\n", tensor->data[idx]);
+            }
+        }
+        printf("]\n");
+    }
+
+    if (tensor->type == TENSOR_TYPE_MATRIX) {
         DimensionDef *dimension1 = tensor->dimensions;
         DimensionDef *dimension2 = ContainerOf(tensor->dimensions->node.next, DimensionDef, node);
 
@@ -86,6 +101,7 @@ struct NamedTensor *Tensor() {
     }
 
     tensor->data = NULL;
+    tensor->type = TENSOR_TYPE_TENSOR;
     tensor->dimension_nums = 0;
     tensor->dimensions = NULL;
     tensor->addDimension = tensor_add_dimension;
@@ -103,20 +119,39 @@ struct NamedTensor *Scalar(double v) {
     }
     *val = v;
     tensor->data = val;
+    tensor->type = TENSOR_TYPE_SCALAR;
+    return tensor;
+}
+
+struct NamedTensor *ColumnVector(struct DimensionDef *dimension, double *vector) {
+    NamedTensor *tensor = Tensor();
+    // n * 1
+    tensor->addDimension(tensor, dimension);
+    tensor->addDimension(tensor, Dimension(dimension->name, 1));
+    tensor->type = TENSOR_TYPE_COLUMN_VECTOR;
+    tensor->data = vector;
+    return tensor;
+}
+
+struct NamedTensor *RowVector(struct DimensionDef *dimension, double *vector) {
+    NamedTensor *tensor = Tensor();
+    // 1 * n
+    tensor->addDimension(tensor, Dimension(dimension->name, 1));
+    tensor->addDimension(tensor, dimension);
+    tensor->type = TENSOR_TYPE_ROW_VECTOR;
+    tensor->data = vector;
     return tensor;
 }
 
 struct NamedTensor *Vector(struct DimensionDef *dimension, double *vector) {
-    NamedTensor *tensor = Tensor();
-    tensor->addDimension(tensor, dimension);
-    tensor->data = vector;
-    return tensor;
+    return RowVector(dimension, vector);
 }
 
 struct NamedTensor *Matrix(struct DimensionDef *dimension1, struct DimensionDef *dimension2, double *matrix) {
     NamedTensor *tensor = Tensor();
     tensor->addDimension(tensor, dimension1);
     tensor->addDimension(tensor, dimension2);
+    tensor->type = TENSOR_TYPE_MATRIX;
     tensor->data = matrix;
     return tensor;
 }
