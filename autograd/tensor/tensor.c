@@ -58,12 +58,12 @@ void tensor_print(struct NamedTensor *tensor) {
     if (tensor->type == TENSOR_TYPE_COLUMN_VECTOR) {
         DimensionDef *height = tensor->dimensions;
         DimensionDef *width = ContainerOf(tensor->dimensions->node.next, DimensionDef, node);
-        printf("%s(%d) = [", height->name, height->size);
+        printf("%s(%d) = [\n", height->name, height->size);
         for (size_t idx = 0; idx < height->size; idx++) {
             if (idx == height->size - 1) {
-                printf("%f", tensor->data[idx]);
+                printf("    %f\n", tensor->data[idx]);
             } else {
-                printf("%f,\n", tensor->data[idx]);
+                printf("    %f,\n", tensor->data[idx]);
             }
         }
         printf("]\n");
@@ -73,9 +73,9 @@ void tensor_print(struct NamedTensor *tensor) {
         DimensionDef *dimension1 = tensor->dimensions;
         DimensionDef *dimension2 = ContainerOf(tensor->dimensions->node.next, DimensionDef, node);
 
-        printf("%s_%s(%dx%d) = [", dimension1->name, dimension2->name, dimension1->size, dimension2->size);
+        printf("%s_%s(%dx%d) = [\n", dimension1->name, dimension2->name, dimension1->size, dimension2->size);
         for (size_t i = 0; i < dimension1->size; i++) {
-            printf("[");
+            printf("    [");
             for (size_t j = 0; j < dimension2->size; j++) {
                 if (j == dimension2->size - 1) {
                     printf("%f", tensor->data[dimension2->size * i + j]);
@@ -84,9 +84,9 @@ void tensor_print(struct NamedTensor *tensor) {
                 }
             }
             if (i == dimension1->size - 1) {
-                printf("]");
+                printf("]\n");
             } else {
-                printf("],");
+                printf("],\n");
             }
         }
         printf("]\n");
