@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stddef.h>
-#include "../memory/mem.h"
+#include "../../memory/mem.h"
 
 struct DimensionDef *tensor_add_dimension(struct NamedTensor *tensor, struct DimensionDef *dimension) {
     tensor->dimension_nums++;

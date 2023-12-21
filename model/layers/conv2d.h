@@ -2,7 +2,7 @@
 #define __LAYER_CONV2D_H__
 
 #include "../layer.h"
-#include "../../tensor/tensor.h"
+#include "../../autograd/tensor/tensor.h"
 
 typedef struct Conv2DKernel {
     uint64_t width;

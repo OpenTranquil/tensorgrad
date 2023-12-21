@@ -7,7 +7,7 @@
 #include "layer.h"
 #include "../optimizer/optimizer.h"
 #include "../lossfunc/lossfunc.h"
-#include "../tensor/tensor.h"
+#include "../autograd/tensor/tensor.h"
 
 typedef struct Layer* (*ModelAddLayer)(struct NNModel *model, struct Layer *layer);
 typedef struct NNModel* (*ModelCompile)(struct NNModel *model, struct Optimizer *optmizer, struct LossFunc *loss);

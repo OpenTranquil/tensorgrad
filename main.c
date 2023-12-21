@@ -14,7 +14,7 @@
 #include "model/layers/flatten.h"
 #include "model/layers/dense.h"
 #include "model/model.h"
-#include "tensor/tensor.h"
+#include "autograd/tensor/tensor.h"
 
 void minist() {
     // TODO: load data

@@ -2,7 +2,7 @@
 #define __TENSOR_H__
 
 #include <stdint.h>
-#include "../common/dlist.h"
+#include "../../common/dlist.h"
 
 typedef enum TensorType {
     TENSOR_TYPE_SCALAR,

@@ -4,6 +4,7 @@ CFLAGS=-c -Wall
 LDFLAGS=
 
 OBJS_AUTOGRAD = memory/mem.o 	\
+				autograd/tensor/tensor.o \
 				autograd/ops.o	\
 				autograd/ops/add_cpu.o	\
 				autograd/ops/mul_cpu.o	\
@@ -11,7 +12,6 @@ OBJS_AUTOGRAD = memory/mem.o 	\
 				autograd/ops/relu_cpu.o	\
 				autograd/ops/softmax_cpu.o	\
 				autograd/compute_node.o	\
-				tensor/tensor.o \
 				lossfunc/cross_entropy.o 	\
 				optimizer/sgd.o 	\
 				optimizer/adam.o 	\

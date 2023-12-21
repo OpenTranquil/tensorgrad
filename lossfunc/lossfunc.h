@@ -1,7 +1,7 @@
 #ifndef __LOSS_FUNC_H__
 #define __LOSS_FUNC_H__
 
-#include "../tensor/tensor.h"
+#include "../autograd/tensor/tensor.h"
 
 typedef enum LossFuncType {
     CROSS_ENTROPY

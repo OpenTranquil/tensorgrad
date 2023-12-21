@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 #include <stdbool.h>
-#include "../tensor/tensor.h"
+#include "tensor/tensor.h"
 
 typedef enum NodeType {
     VARIABLE = 0,
