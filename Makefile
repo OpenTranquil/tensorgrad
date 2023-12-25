@@ -64,5 +64,5 @@ clean:
 cleanall:
 	make clean
 	rm -rf minst
-	rm -rf scalar_grad
+	rm -rf scalar_grad_test
 	rm -rf min_net
