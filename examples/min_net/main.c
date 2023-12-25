@@ -6,7 +6,7 @@
 #include "../../tensorgrad/common/random.h"
 #include "../../tensorgrad/autograd/ops.h"
 #include "../../tensorgrad/autograd/compute_node.h"
-#include "../../tensorgrad/optimizer/adam.h"
+#include "../../tensorgrad/optimizer/sgd.h"
 #include "../../tensorgrad/lossfunc/cross_entropy.h"
 #include "../../tensorgrad/autograd/tensor/tensor.h"
 
@@ -42,19 +42,19 @@ void minNetTest() {
     struct NamedTensor *B = ColumnVector(Dimension("B", 10), Bdata);
     B->print(B);
 
-    ComputeNode *reluNode = ReLU(Variable(X, "X"));
-    NamedTensor *reluTensor = Forword(reluNode);
-    reluTensor->print(reluTensor);
+    // ComputeNode *reluNode = ReLU(Variable(X, "X"));
+    // NamedTensor *reluTensor = Forword(reluNode);
+    // reluTensor->print(reluTensor);
 
     ComputeNode *paramA = Param(A, "A");
-    ComputeNode *mulNode = Mul(paramA, ReLU(Variable(X, "X")));
-    NamedTensor *mulTensor = Forword(mulNode);
-    mulTensor->print(mulTensor);
+    // ComputeNode *mulNode = Mul(paramA, ReLU(Variable(X, "X")));
+    // NamedTensor *mulTensor = Forword(mulNode);
+    // mulTensor->print(mulTensor);
 
     ComputeNode *paramB = Param(B, "B");
-    ComputeNode *addNode = Add(Mul(paramA, ReLU(Variable(X, "X"))), paramB);
-    NamedTensor *addTensor = Forword(addNode);
-    addTensor->print(addTensor);
+    // ComputeNode *addNode = Add(Mul(paramA, ReLU(Variable(X, "X"))), paramB);
+    // NamedTensor *addTensor = Forword(addNode);
+    // addTensor->print(addTensor);
 
     ComputeNode *softmaxNode = Softmax(Add(Mul(paramA, ReLU(Variable(X, "X"))), paramB));
     struct NamedTensor *probVector = Forword(softmaxNode);
@@ -73,6 +73,12 @@ void minNetTest() {
     printf("LOSS: %f\n", loss);
 
     Backword(paramA);
+    Backword(paramB);
+
+    Optimizer *optmizer = OptmizerSGD(0.0001);
+    optmizer->ops.addParam(optmizer, paramA);
+    optmizer->ops.addParam(optmizer, paramB);
+    optmizer->ops.update(optmizer);
 }
 
 int main(int argc, char *argv[]) {

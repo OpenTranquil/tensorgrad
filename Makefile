@@ -38,7 +38,7 @@ tensorgrad:	$(OBJS_TENSORGRAD)
 	make clean
 
 min_net: $(OBJS_EXAMPLE_MINNET)
-	$(CC) $(LDFLAGS) $(OBJS_EXAMPLE_MINNET) -o minnet
+	$(CC) $(LDFLAGS) $(OBJS_EXAMPLE_MINNET) -o min_net
 	make clean
 
 scalar_grad: $(OBJS_EXAMPLE_SCALAR_TEST)
@@ -59,3 +59,10 @@ clean:
 	rm -rf */*/*/*.o
 	rm -rf */*/*/*/*.o
 	rm -rf */*/*/*/*/*.o
+
+
+cleanall:
+	make clean
+	rm -rf minst
+	rm -rf scalar_grad
+	rm -rf min_net
