@@ -20,6 +20,9 @@ OBJS_TENSORGRAD = tensorgrad/memory/mem.o 	\
 OBJS_EXAMPLE_MINNET = $(OBJS_TENSORGRAD)	\
 				examples/min_net/main.o
 
+OBJS_EXAMPLE_SCALAR_TEST = $(OBJS_TENSORGRAD)	\
+				examples/scalar_grad/main.o
+
 OBJS_EXAMPLE_MINST = $(OBJS_TENSORGRAD)	\
 				examples/resnet/model/layers/conv2d.o 	\
 				examples/resnet/model/layers/maxpooling2d.o 	\
@@ -36,6 +39,10 @@ tensorgrad:	$(OBJS_TENSORGRAD)
 
 min_net: $(OBJS_EXAMPLE_MINNET)
 	$(CC) $(LDFLAGS) $(OBJS_EXAMPLE_MINNET) -o minnet
+	make clean
+
+scalar_grad: $(OBJS_EXAMPLE_SCALAR_TEST)
+	$(CC) $(LDFLAGS) $(OBJS_EXAMPLE_SCALAR_TEST) -o scalar_grad_test
 	make clean
 
 minst: $(OBJS_EXAMPLE_MINST)
