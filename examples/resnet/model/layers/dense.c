@@ -2,7 +2,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../../memory/mem.h"
+#include "../../../../tensorgrad/memory/mem.h"
 
 void dense_forword(struct Layer *layer, struct Tensor *input) {
     printf("dense_forword\n");

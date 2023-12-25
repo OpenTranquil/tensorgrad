@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
-#include "../common/dlist.h"
+#include "../../../tensorgrad/common/dlist.h"
 #include "neuron.h"
 
 typedef struct TupleU64 {

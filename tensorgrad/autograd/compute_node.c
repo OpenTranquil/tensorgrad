@@ -11,6 +11,7 @@ ComputeNode *Param(struct NamedTensor *init_val, const char *name) {
         printf("ComputeNode malloc failed!\n");
         exit(1);
     }
+    dlist_init(&node->paramList);
     node->type = PARAM;
     node->grad = Scalar(1.0f);
     node->parent == NULL;
@@ -27,6 +28,7 @@ ComputeNode *Variable(struct NamedTensor *init_val, const char *name) {
         printf("ComputeNode malloc failed!\n");
         exit(1);
     }
+    dlist_init(&node->paramList);
     node->type = VARIABLE;
     node->grad = Scalar(1.0f);
     node->parent == NULL;
@@ -43,6 +45,7 @@ ComputeNode *Constant(struct NamedTensor *init_val) {
         printf("ComputeNode malloc failed!\n");
         exit(1);
     }
+    dlist_init(&node->paramList);
     node->type = CONSTANT;
     node->grad = Scalar(1.0f);
     node->parent == NULL;

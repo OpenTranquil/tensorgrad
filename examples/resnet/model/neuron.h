@@ -1,7 +1,7 @@
 #ifndef __NEURON_H__
 #define __NEURON_H__
-#include "../common/dlist.h"
-#include "../autograd/tensor/tensor.h"
+#include "../../../tensorgrad/common/dlist.h"
+#include "../../../tensorgrad/autograd/tensor/tensor.h"
 
 typedef struct Activation {
 

@@ -3,32 +3,44 @@ CC = gcc
 CFLAGS=-c -Wall
 LDFLAGS=
 
-OBJS_AUTOGRAD = memory/mem.o 	\
-				autograd/tensor/tensor.o \
-				autograd/ops.o	\
-				autograd/ops/add_cpu.o	\
-				autograd/ops/mul_cpu.o	\
-				autograd/ops/pow_cpu.o	\
-				autograd/ops/relu_cpu.o	\
-				autograd/ops/softmax_cpu.o	\
-				autograd/compute_node.o	\
-				lossfunc/cross_entropy.o 	\
-				optimizer/sgd.o 	\
-				optimizer/adam.o 	\
-				model/layers/conv2d.o 	\
-				model/layers/maxpooling2d.o 	\
-				model/layers/flatten.o 	\
-				model/layers/dense.o 	\
-				model/model.o 	\
-				main.o
+OBJS_TENSORGRAD = tensorgrad/memory/mem.o 	\
+				tensorgrad/autograd/tensor/tensor.o \
+				tensorgrad/autograd/ops.o	\
+				tensorgrad/autograd/ops/add_cpu.o	\
+				tensorgrad/autograd/ops/mul_cpu.o	\
+				tensorgrad/autograd/ops/pow_cpu.o	\
+				tensorgrad/autograd/ops/relu_cpu.o	\
+				tensorgrad/autograd/ops/softmax_cpu.o	\
+				tensorgrad/autograd/compute_node.o	\
+				tensorgrad/lossfunc/cross_entropy.o 	\
+				tensorgrad/optimizer/optimizer.o 	\
+				tensorgrad/optimizer/sgd.o 	\
+				tensorgrad/optimizer/adam.o
 
-all: grad
+OBJS_EXAMPLE_MINNET = $(OBJS_TENSORGRAD)	\
+				examples/min_net/main.o
 
-grad:	$(OBJS_AUTOGRAD)
-	$(CC) $(LDFLAGS) $(OBJS_AUTOGRAD) -o grad
-	rm -rf *.o
-	rm -rf */*.o
-	rm -rf */*/*.o
+OBJS_EXAMPLE_MINST = $(OBJS_TENSORGRAD)	\
+				examples/resnet/model/layers/conv2d.o 	\
+				examples/resnet/model/layers/maxpooling2d.o 	\
+				examples/resnet/model/layers/flatten.o 	\
+				examples/resnet/model/layers/dense.o 	\
+				examples/resnet/model/model.o 	\
+				examples/resnet/main.o
+
+all: tensorgrad
+
+tensorgrad:	$(OBJS_TENSORGRAD)
+	$(CC) $(LDFLAGS) $(OBJS_TENSORGRAD) -shared -o libtg.so
+	make clean
+
+min_net: $(OBJS_EXAMPLE_MINNET)
+	$(CC) $(LDFLAGS) $(OBJS_EXAMPLE_MINNET) -o minnet
+	make clean
+
+minst: $(OBJS_EXAMPLE_MINST)
+	$(CC) $(LDFLAGS) $(OBJS_EXAMPLE_MINST) -o minst
+	make clean
 
 *.o: *.c
 	$(CC) $(CFLAGS) $< -o $@
@@ -37,4 +49,6 @@ clean:
 	rm -rf *.o
 	rm -rf */*.o
 	rm -rf */*/*.o
-	rm -rf grad
+	rm -rf */*/*/*.o
+	rm -rf */*/*/*/*.o
+	rm -rf */*/*/*/*/*.o

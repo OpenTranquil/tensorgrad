@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void adam_optimize(struct Optimizer *optimizer, struct Model *model) {
+void adam_optimize(struct Optimizer *optimizer) {
     printf("adam_optimize\n");
     struct ADAMOptimizer *adamOptmizer = ContainerOf(optimizer, ADAMOptimizer, base);
     // TODO
@@ -19,6 +19,7 @@ struct Optimizer *OptmizerADAM() {
     }
 
     optimizer->base.ops.update = adam_optimize;
+    optimizer->base.ops.addParam = optimizer_add_param;
 
     return &optimizer->base;
 }

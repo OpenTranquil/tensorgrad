@@ -37,6 +37,7 @@ typedef struct ComputeNode {
 
     bool requireGrad;
     NamedTensor *grad;
+    ListNode paramList;
     union {
         struct {
             union {

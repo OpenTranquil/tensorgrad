@@ -1,6 +1,6 @@
 #include "conv2d.h"
-#include "../../memory/mem.h"
-#include "../../common/random.h"
+#include "../../../../tensorgrad/memory/mem.h"
+#include "../../../../tensorgrad/common/random.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>

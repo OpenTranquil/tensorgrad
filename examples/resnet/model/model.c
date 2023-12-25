@@ -1,7 +1,7 @@
 #include "model.h"
-#include "../memory/mem.h"
-#include "../common/random.h"
-#include "../optimizer/optimizer.h"
+#include "../../../tensorgrad/memory/mem.h"
+#include "../../../tensorgrad/common/random.h"
+#include "../../../tensorgrad/optimizer/optimizer.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -87,7 +87,7 @@ struct NNModel* model_fit(struct NNModel *model, struct Tensor *tensor, uint64_t
         model->onLoss(model, loss);
 
         Optimizer *optimizer = model->optmizer;
-        optimizer->ops.update(optimizer, model);
+        optimizer->ops.update(optimizer);
     }
 
     return model;

@@ -5,8 +5,9 @@
 
 typedef struct SGDOptimizer {
     Optimizer base;
+    double learningRate;
 } SGDOptimizer;
 
-struct Optimizer *OptmizerSGD();
+struct Optimizer *OptmizerSGD(double learningRate);
 
 #endif /* __OPTIMIZER_SGD_H__ */
