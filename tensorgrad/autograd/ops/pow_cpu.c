@@ -45,7 +45,7 @@ struct NamedTensor *op_pow_backword(struct ComputeNode *node) {
         }
         return node->grad;
     }
-    printf("TODO: not support vector and maxrix now!\n");
+    printf("TODO: not support pow backword for %s and %s now!\n", TensorTypeName(leftVal->type), TensorTypeName(rightVal->type));
     return NULL;
 }
 

@@ -6,7 +6,6 @@
 #include <stdio.h>
 
 void adam_optimize(struct Optimizer *optimizer) {
-    printf("adam_optimize\n");
     struct ADAMOptimizer *adamOptmizer = ContainerOf(optimizer, ADAMOptimizer, base);
     // TODO
 }

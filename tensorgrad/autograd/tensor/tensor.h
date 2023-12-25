@@ -4,13 +4,24 @@
 #include <stdint.h>
 #include "../../common/dlist.h"
 
+
+
 typedef enum TensorType {
     TENSOR_TYPE_SCALAR,
     TENSOR_TYPE_ROW_VECTOR,
     TENSOR_TYPE_COLUMN_VECTOR,
     TENSOR_TYPE_MATRIX,
-    TENSOR_TYPE_TENSOR
+    TENSOR_TYPE_TENSOR,
+    TENSOR_TYPE_MAX,
 } TensorType;
+
+static char *TENSOR_TYPE_STRS[TENSOR_TYPE_MAX] = {
+    "Scalar", "Row Vector", "Column Vector", "Matrix", "Tensor", "NONE"
+};
+
+static const char *TensorTypeName(TensorType type) {
+    return TENSOR_TYPE_STRS[type];
+}
 
 typedef struct DimensionDef {
     struct ListNode node;

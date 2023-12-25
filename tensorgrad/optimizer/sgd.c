@@ -6,7 +6,6 @@
 #include <stdio.h>
 
 void sgd_optimize(struct Optimizer *optimizer) {
-    printf("sgd_optimize\n");
     struct SGDOptimizer *sgdOptmizer = ContainerOf(optimizer, SGDOptimizer, base);
     // TODO:
 }

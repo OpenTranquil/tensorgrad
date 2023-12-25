@@ -107,8 +107,13 @@ struct NamedTensor *op_mul_backword(struct ComputeNode *node) {
         return node->grad;
     }
 
+    // if (leftVal->type == TENSOR_TYPE_MATRIX && rightVal->type == TENSOR_TYPE_COLUMN_VECTOR) {
+    //     if (left->requireGrad) {
 
-    printf("TODO: not support vector and maxrix now!\n");
+    //     }
+    // }
+
+    printf("TODO: not support mul backword for %s and %s now!\n", TensorTypeName(leftVal->type), TensorTypeName(rightVal->type));
     return NULL;
 }
 

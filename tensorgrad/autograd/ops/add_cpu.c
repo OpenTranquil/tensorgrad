@@ -49,7 +49,7 @@ struct NamedTensor *op_add_forword(struct ComputeNode *node) {
         NamedTensor *output = ColumnVector(Dimension("add_out", leftVal->dimensions->size), outData);
         return output;
     }
-    printf("TODO: not support vector and maxrix now!\n");
+    printf("TODO: not support add backword for %s and %s now!\n", TensorTypeName(leftVal->type), TensorTypeName(rightVal->type));
     return NULL;
 }
 

@@ -60,7 +60,6 @@ clean:
 	rm -rf */*/*/*/*.o
 	rm -rf */*/*/*/*/*.o
 
-
 cleanall:
 	make clean
 	rm -rf minst
