@@ -144,7 +144,7 @@ struct NamedTensor *RowVector(struct DimensionDef *dimension, double *vector) {
 }
 
 struct NamedTensor *Vector(struct DimensionDef *dimension, double *vector) {
-    return RowVector(dimension, vector);
+    return ColumnVector(dimension, vector);
 }
 
 struct NamedTensor *Matrix(struct DimensionDef *dimension1, struct DimensionDef *dimension2, double *matrix) {

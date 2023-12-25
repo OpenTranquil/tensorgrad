@@ -18,7 +18,13 @@ struct NamedTensor *op_relu_forword(struct ComputeNode *node) {
         return output;
     }
     if (operandVal->type == TENSOR_TYPE_COLUMN_VECTOR) {
-        // TODO
+        DimensionDef *height = operandVal->dimensions;
+        double *outData = AllocMem(sizeof(double) * height->size);
+        for (size_t i = 0; i < height->size; i++) {
+            outData[i] = operandVal->data[i] > 0.0f ? operandVal->data[i] : 0.0f;
+        }
+        NamedTensor *output = ColumnVector(Dimension("relu_out", height->size), outData);
+        return output;
     }
     if (operandVal->type == TENSOR_TYPE_MATRIX) {
         // TODO

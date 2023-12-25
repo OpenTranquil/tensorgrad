@@ -15,48 +15,55 @@ struct NamedTensor *op_mul_forword(struct ComputeNode *node) {
         return  Scalar(*leftVal->data * *rightVal->data);
     }
     if (leftVal->type == TENSOR_TYPE_ROW_VECTOR && rightVal->type == TENSOR_TYPE_ROW_VECTOR) {
-        // TODO
+        printf("cannot mul a row vector with a row vector!\n");
+        exit(0);
     }
     if (leftVal->type == TENSOR_TYPE_COLUMN_VECTOR && rightVal->type == TENSOR_TYPE_COLUMN_VECTOR) {
-        // TODO
+        printf("cannot mul a column vector with a column vector!\n");
+        exit(0);
     }
-    //           [ q w e ]   [bq + nw + em]
-    // [b n m] * [ a s d ] = [ba + ns + md]
-    //           [ z x c ]   [bz + xn + mc]
+    //           [ q w e ]
+    // [b n m] * [ a s d ] = [bq+na+mz bw+ns+mx be+nd+mc]
+    //           [ z x c ]
     if (leftVal->type == TENSOR_TYPE_ROW_VECTOR && rightVal->type == TENSOR_TYPE_MATRIX) {
         DimensionDef *leftHeight = leftVal->dimensions;
         DimensionDef *leftWidth = ContainerOf(leftHeight->node.next, DimensionDef, node);
         DimensionDef *rightHeight = rightVal->dimensions;
         DimensionDef *rightWidth = ContainerOf(rightHeight->node.next, DimensionDef, node);
-        if (leftWidth->size != rightWidth->size) {
-            printf("Vector (%d) can not mul Matrix(%dx%d)!\n", leftWidth->size, rightHeight->size, rightWidth->size);
+        if (leftWidth->size != rightHeight->size) {
+            printf("Row Vector (%d) can not mul Matrix(%dx%d)!\n", leftWidth->size, rightHeight->size, rightWidth->size);
             exit(0);
         }
         double *outData = AllocMem(rightHeight->size * sizeof(double));
-        for (size_t i = 0; i < rightHeight->size; i++) {
+        for (size_t i = 0; i < rightWidth->size; i++) {
             double val = 0.0f;
-            for (size_t j = 0; j < rightWidth->size; j++) {
-                val += leftVal->data[j] * rightVal->data[i * rightWidth->size + j];
+            for (size_t j = 0; j < rightHeight->size; j++) {
+                val += leftVal->data[j] * rightVal->data[j * rightWidth->size + i];
             }
             outData[i] = val;
         }
-        
-        NamedTensor *output = ColumnVector(Dimension("mul_out", rightHeight->size), outData);
+
+        NamedTensor *output = RowVector(Dimension("mul_out", rightHeight->size), outData);
         return output;
     }
-    //  [ q w e ]             [bq + nw + em]
-    //  [ a s d ] * [b n m] = [ba + ns + md]
-    //  [ z x c ]             [bz + xn + mc]
     if (leftVal->type == TENSOR_TYPE_MATRIX && rightVal->type == TENSOR_TYPE_ROW_VECTOR) {
+        printf("cannot mul a matrix with a row vector!\n");
+        exit(0);
+    }
+    //  [ q w e ]   [b]          [bq + nw + em]
+    //  [ a s d ] * [n]    =     [ba + ns + md]
+    //  [ z x c ]   [m]          [bz + xn + mc]
+    //  
+    if (leftVal->type == TENSOR_TYPE_MATRIX && rightVal->type == TENSOR_TYPE_COLUMN_VECTOR) {
         DimensionDef *leftHeight = leftVal->dimensions;
         DimensionDef *leftWidth = ContainerOf(leftHeight->node.next, DimensionDef, node);
         DimensionDef *rightHeight = rightVal->dimensions;
         DimensionDef *rightWidth = ContainerOf(rightHeight->node.next, DimensionDef, node);
-        if (leftWidth->size != rightWidth->size) {
-            printf("Matrix (%dx%d) can not mul Vector(%d)!\n", leftHeight->size, leftWidth->size, rightWidth->size);
+        if (leftWidth->size != rightHeight->size) {
+            printf("Matrix (%dx%d) can not mul Column Vector(%d)!\n", leftHeight->size, leftWidth->size, rightHeight->size);
             exit(0);
         }
-        double *outData = AllocMem(leftHeight->size * sizeof(double));
+        double *outData = AllocMem(rightHeight->size * sizeof(double));
         for (size_t i = 0; i < leftHeight->size; i++) {
             double val = 0.0f;
             for (size_t j = 0; j < leftWidth->size; j++) {
@@ -65,7 +72,7 @@ struct NamedTensor *op_mul_forword(struct ComputeNode *node) {
             outData[i] = val;
         }
 
-        NamedTensor *output = ColumnVector(Dimension("mul_out", leftWidth->size), outData);
+        NamedTensor *output = ColumnVector(Dimension("mul_out", rightHeight->size), outData);
         return output;
     }
     if (leftVal->type == TENSOR_TYPE_MATRIX && rightVal->type == TENSOR_TYPE_MATRIX) {

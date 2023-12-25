@@ -111,7 +111,7 @@ void minNetTest() {
             Adata[i * 10 + j] = frand(10.0f);
         }
     }
-    struct NamedTensor *A = Matrix(Dimension("H", 10), Dimension("W", 10), Adata);
+    struct NamedTensor *A = Matrix(Dimension("A", 10), Dimension("A", 10), Adata);
     A->print(A);
 
     double *Bdata = (double *)AllocMem(sizeof(double) * 10 * 10);
@@ -121,13 +121,12 @@ void minNetTest() {
     struct NamedTensor *B = ColumnVector(Dimension("B", 10), Bdata);
     B->print(B);
 
-
     ComputeNode *reluNode = ReLU(Variable(X, "X"));
     NamedTensor *reluTensor = Forword(reluNode);
     reluTensor->print(reluTensor);
 
     ComputeNode *paramA = Param(A, "A");
-    ComputeNode *mulNode = Mul(ReLU(Variable(X, "X")), paramA);
+    ComputeNode *mulNode = Mul(paramA, ReLU(Variable(X, "X")));
     NamedTensor *mulTensor = Forword(mulNode);
     mulTensor->print(mulTensor);
 
