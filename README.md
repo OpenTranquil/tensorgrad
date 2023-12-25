@@ -1,9 +1,9 @@
 # Tensor library for machine learning
 
 ## Features
-Written in C
-Automatic differentiation
-ADAM and SGD optimizers
+* Written in C
+* Automatic differentiation
+* ADAM and SGD optimizers
 
 ## TODO
 * more ops like EXP, LOG, RELU, TANH, SIGMOID, SOFTMAX...
