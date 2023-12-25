@@ -1,9 +1,12 @@
-# simple ml framework in c called twoflow
+# Tensor library for machine learning
 
+## Features
+Written in C
+Automatic differentiation
+ADAM and SGD optimizers
 
 ## TODO
 * more ops like EXP, LOG, RELU, TANH, SIGMOID, SOFTMAX...
-* conv2d, maxpooling2d, flatten, dense layer
 * Veriable support tensor
 * Cross-Entropy loss function
 * ADAM and SGD optimizer
