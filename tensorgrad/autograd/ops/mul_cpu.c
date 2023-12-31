@@ -107,6 +107,8 @@ struct NamedTensor *op_mul_backword(struct ComputeNode *node) {
         return node->grad;
     }
 
+    //F(X) = X * A
+    //F'(X) = At outproduct I
     if (leftVal->type == TENSOR_TYPE_MATRIX && rightVal->type == TENSOR_TYPE_COLUMN_VECTOR) {
         if (left->requireGrad) {
 

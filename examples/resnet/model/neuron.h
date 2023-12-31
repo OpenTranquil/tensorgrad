@@ -10,8 +10,8 @@ typedef struct Activation {
 typedef struct Neuron {
     ListNode node;
     NamedTensor *input;
-    NamedTensor *weightParams;
-    NamedTensor *offsetParams;
+    NamedTensor *weight;
+    NamedTensor *bias;
     NamedTensor *output;
     Activation *actv;
 } Neuron;
