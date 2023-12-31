@@ -22,6 +22,25 @@ struct NamedTensor *op_mul_forword(struct ComputeNode *node) {
         printf("cannot mul a column vector with a column vector!\n");
         exit(0);
     }
+    //           [ q ]
+    // [b n m] * [ a ] = [bq+na+mz]
+    //           [ z ]
+    if (leftVal->type == TENSOR_TYPE_ROW_VECTOR && rightVal->type == TENSOR_TYPE_COLUMN_VECTOR) {
+        DimensionDef *leftHeight = leftVal->dimensions;
+        DimensionDef *leftWidth = ContainerOf(leftHeight->node.next, DimensionDef, node);
+        DimensionDef *rightHeight = rightVal->dimensions;
+        DimensionDef *rightWidth = ContainerOf(rightHeight->node.next, DimensionDef, node);
+        if (leftWidth->size != rightHeight->size) {
+            printf("Row Vector (%d) can not mul Column Vector(%d)!\n", leftWidth->size, rightHeight->size);
+            exit(0);
+        }
+        double val = 0.0f;
+        for (size_t i = 0; i < leftWidth->size; i++) {
+            val += leftVal->data[i] * rightVal->data[i];
+        }
+        NamedTensor *output = Scalar(val);
+        return output;
+    }
     //           [ q w e ]
     // [b n m] * [ a s d ] = [bq+na+mz bw+ns+mx be+nd+mc]
     //           [ z x c ]
