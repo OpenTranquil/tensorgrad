@@ -105,6 +105,12 @@ struct NamedTensor *op_mul_backword(struct ComputeNode *node) {
     ComputeNode *left = node->operator.binaryOperand.left;
     NamedTensor *leftVal = forword(left);
     NamedTensor *rightVal = forword(right);
+
+    DimensionDef *leftHeight = leftVal->dimensions;
+    DimensionDef *leftWidth = ContainerOf(leftHeight->node.next, DimensionDef, node);
+    DimensionDef *rightHeight = rightVal->dimensions;
+    DimensionDef *rightWidth = ContainerOf(rightHeight->node.next, DimensionDef, node);
+
     if (leftVal->type == TENSOR_TYPE_SCALAR && rightVal->type == TENSOR_TYPE_SCALAR) {
         double gradVal = 1.0f;
         if (left->requireGrad) {
@@ -122,6 +128,23 @@ struct NamedTensor *op_mul_backword(struct ComputeNode *node) {
             node->grad = Scalar(gradVal);
         } else {
             *node->grad->data = gradVal;
+        }
+        return node->grad;
+    }
+
+    //           [ q ]
+    // [b n m] * [ a ] = [bq+na+mz]
+    //           [ z ]
+    // d'b = q, d'n = a, d'm = z, d' = [q n m]
+    if (leftVal->type == TENSOR_TYPE_ROW_VECTOR && rightVal->type == TENSOR_TYPE_COLUMN_VECTOR) {
+        if (left->requireGrad) {
+            double *outData = AllocMem(rightHeight->size * sizeof(double));
+            for (size_t i = 0; i < rightHeight->size; i++) {
+                outData[i] = rightVal->data[i];
+            }
+            NamedTensor *output = RowVector(Dimension("v_v_mul_grad", rightHeight->size), outData);
+            node->grad = output;
+            // TODO: chain
         }
         return node->grad;
     }
