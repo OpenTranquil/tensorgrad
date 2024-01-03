@@ -146,14 +146,35 @@ struct NamedTensor *op_mul_backword(struct ComputeNode *node) {
             node->grad = output;
             // TODO: chain
         }
+        if (right->requireGrad) {
+            // TODO:
+        }
         return node->grad;
     }
 
-    //F(X) = X * A
-    //F'(X) = At outproduct I
+    //           [ q w e ]
+    // [b n m] * [ a s d ] = [bq+na+mz bw+ns+mx be+nd+mc]
+    //           [ z x c ]
+    if (leftVal->type == TENSOR_TYPE_ROW_VECTOR && rightVal->type == TENSOR_TYPE_MATRIX) {
+        if (left->requireGrad) {
+            // TODO:
+        }
+        if (right->requireGrad) {
+            // TODO:
+        }
+    }
+
+
+    //  [ q w e ]   [b]          [bq + nw + em]
+    //  [ a s d ] * [n]    =     [ba + ns + md]
+    //  [ z x c ]   [m]          [bz + xn + mc]
+    //  
     if (leftVal->type == TENSOR_TYPE_MATRIX && rightVal->type == TENSOR_TYPE_COLUMN_VECTOR) {
         if (left->requireGrad) {
-
+            // TODO:
+        }
+        if (right->requireGrad) {
+            // TODO:
         }
     }
 
